@@ -3,110 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Nail Color Chart</title>
+    <title>My Nail Collection</title>
     <style>
+        :root {
+            --primary: #d4a373;
+            --primary-light: #faedcd;
+            --bg: #fdfbf7;
+            --text: #333;
+            --card-bg: #fff;
+            --gray: #888;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #fdfbf7;
-            color: #333;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
             padding: 20px;
         }
         h1 {
             text-align: center;
-            color: #d4a373;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        /* タブナビゲーション */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 30px;
         }
-        .container {
-            max-width: 900px;
+        .tab-btn {
+            background-color: #eee;
+            border: none;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--gray);
+        }
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
+        }
+
+        /* 画面の切り替え */
+        .tab-content {
+            display: none;
+            max-width: 1000px;
             margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* グリッドレイアウト */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
+
+        /* カード共通デザイン */
         .card {
-            background: #fff;
+            background: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             overflow: hidden;
-            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
         }
-        .card:hover {
-            transform: translateY(-4px);
-        }
-        .color-chip {
-            height: 120px;
-            width: 100%;
+
+        /* カラーカード用デザイン */
+        .image-gallery {
+            display: flex;
+            height: 140px;
             border-bottom: 1px solid #f0f0f0;
         }
+        .color-chip {
+            flex: 1;
+            height: 100%;
+        }
+        .nail-photo {
+            flex: 1;
+            height: 100%;
+            object-fit: cover;
+            border-left: 1px solid #fff;
+        }
         .info {
-            padding: 12px;
-            text-align: center;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .category-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+        .category {
+            background-color: var(--primary-light);
+            color: #bc6c25;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .price {
+            color: var(--gray);
         }
         .brand {
             font-size: 11px;
-            color: #888;
-            margin-bottom: 4px;
+            color: #aaa;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             color: #444;
-            margin-bottom: 4px;
         }
-        .code {
+        /* ネイル例へのリンクボタン */
+        .link-btn {
+            margin-top: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 6px;
+            border-radius: 6px;
             font-size: 12px;
-            color: #aaa;
+            color: #555;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .link-btn:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: #bc6c25;
+        }
+
+        /* ネイル例（着用写真）カード用デザイン */
+        .example-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .example-info {
+            padding: 16px;
+        }
+        .example-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        .used-colors {
+            font-size: 12px;
+            color: var(--gray);
         }
     </style>
 </head>
 <body>
 
-    <h1>My Nail Color Chart</h1>
+    <h1>My Nail Collection</h1>
 
-    <div class="container">
-        <!-- ネイル1 -->
-        <div class="card">
-            <div class="color-chip" style="background-color: #fce4ec;"></div>
-            <div class="info">
-                <div class="brand">JellMeCho</div>
-                <div class="name">シアーピンク</div>
-                <div class="code">#fce4ec</div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('colors')">🎨 カラー一覧</button>
+        <button class="tab-btn" onclick="switchTab('examples')">💅 ネイル例</button>
+    </div>
+
+    <div id="colors" class="tab-content active">
+        <div class="grid">
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #fce4ec;"></div>
+                    <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=300&q=80" alt="着用写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price">
+                        <span class="category">ジェルネイル</span>
+                        <span class="price">¥1,100</span>
+                    </div>
+                    <div class="brand">JellMeCho</div>
+                    <div class="name">シアーピンク</div>
+                    <a href="#example-1" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
             </div>
-        </div>
 
-        <!-- ネイル2 -->
-        <div class="card">
-            <div class="color-chip" style="background-color: #d7ccc8;"></div>
-            <div class="info">
-                <div class="brand">CANMAKE</div>
-                <div class="name">グレージュ</div>
-                <div class="code">#d7ccc8</div>
-            </div>
-        </div>
-
-        <!-- ネイル3 -->
-        <div class="card">
-            <div class="color-chip" style="background-color: #c5a880;"></div>
-            <div class="info">
-                <div class="brand">パラドゥ</div>
-                <div class="name">ゴールドラメ</div>
-                <div class="code">#c5a880</div>
-            </div>
-        </div>
-
-        <!-- ネイル4 -->
-        <div class="card">
-            <div class="color-chip" style="background-color: #b71c1c;"></div>
-            <div class="info">
-                <div class="brand">uka</div>
-                <div class="name">ボルドー</div>
-                <div class="code">#b71c1c</div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #d7ccc8;"></div>
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=300&q=80" alt="着用写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price">
+                        <span class="category">マニキュア</span>
+                        <span class="price">¥396</span>
+                    </div>
+                    <div class="brand">CANMAKE</div>
+                    <div class="name">グレージュ</div>
+                    <a href="#example-2" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
             </div>
         </div>
     </div>
+
+    <div id="examples" class="tab-content">
+        <div class="grid">
+            <div class="card" id="example-1">
+                <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=600&q=80" alt="ネイル例1" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">春のシアーピンクニュアンスネイル</div>
+                    <div class="used-colors">使用カラー: JellMeCho シアーピンク 他</div>
+                </div>
+            </div>
+
+            <div class="card" id="example-2">
+                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" alt="ネイル例2" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">大人シンプル グレージュワンカラー</div>
+                    <div class="used-colors">使用カラー: CANMAKE グレージュ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // タブを切り替える関数
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // カラー一覧から「ネイル例」タブへ移動しつつ該当箇所へスクロールする関数
+        function jumpToExample(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            // ネイル例のタブボタンをアクティブにする
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons[1].classList.add('active');
+        }
+    </script>
 
 </body>
 </html>
