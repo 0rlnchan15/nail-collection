@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Nail Color Chart</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fdfbf7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #d4a373;
+            margin-bottom: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        .color-chip {
+            height: 120px;
+            width: 100%;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info {
+            padding: 12px;
+            text-align: center;
+        }
+        .brand {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 4px;
+        }
+        .code {
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>My Nail Color Chart</h1>
+
+    <div class="container">
+        <!-- ネイル1 -->
+        <div class="card">
+            <div class="color-chip" style="background-color: #fce4ec;"></div>
+            <div class="info">
+                <div class="brand">JellMeCho</div>
+                <div class="name">シアーピンク</div>
+                <div class="code">#fce4ec</div>
+            </div>
+        </div>
+
+        <!-- ネイル2 -->
+        <div class="card">
+            <div class="color-chip" style="background-color: #d7ccc8;"></div>
+            <div class="info">
+                <div class="brand">CANMAKE</div>
+                <div class="name">グレージュ</div>
+                <div class="code">#d7ccc8</div>
+            </div>
+        </div>
+
+        <!-- ネイル3 -->
+        <div class="card">
+            <div class="color-chip" style="background-color: #c5a880;"></div>
+            <div class="info">
+                <div class="brand">パラドゥ</div>
+                <div class="name">ゴールドラメ</div>
+                <div class="code">#c5a880</div>
+            </div>
+        </div>
+
+        <!-- ネイル4 -->
+        <div class="card">
+            <div class="color-chip" style="background-color: #b71c1c;"></div>
+            <div class="info">
+                <div class="brand">uka</div>
+                <div class="name">ボルドー</div>
+                <div class="code">#b71c1c</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
