@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Nail Collection</title>
+    <title>My Nail Collection - Full Sample</title>
     <style>
         :root {
             --primary: #d4a373;
@@ -53,7 +53,7 @@
         /* 画面の切り替え */
         .tab-content {
             display: none;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         .tab-content.active {
@@ -63,7 +63,7 @@
         /* グリッドレイアウト */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
         }
 
@@ -148,7 +148,7 @@
         /* ネイル例（着用写真）カード用デザイン */
         .example-img {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
         }
         .example-info {
@@ -170,8 +170,8 @@
     <h1>My Nail Collection</h1>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('colors')">🎨 カラー一覧</button>
-        <button class="tab-btn" onclick="switchTab('examples')">💅 ネイル例</button>
+        <button class="tab-btn active" onclick="switchTab('colors')">🎨 カラー一覧 (20)</button>
+        <button class="tab-btn" onclick="switchTab('examples')">💅 ネイル例 (8)</button>
     </div>
 
     <div id="colors" class="tab-content active">
@@ -179,32 +179,241 @@
             <div class="card">
                 <div class="image-gallery">
                     <div class="color-chip" style="background-color: #fce4ec;"></div>
-                    <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=300&q=80" alt="着用写真" class="nail-photo">
+                    <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
                 </div>
                 <div class="info">
-                    <div class="category-price">
-                        <span class="category">ジェルネイル</span>
-                        <span class="price">¥1,100</span>
-                    </div>
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,100</span></div>
                     <div class="brand">JellMeCho</div>
                     <div class="name">シアーピンク</div>
                     <a href="#example-1" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
                 </div>
             </div>
-
             <div class="card">
                 <div class="image-gallery">
                     <div class="color-chip" style="background-color: #d7ccc8;"></div>
-                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=300&q=80" alt="着用写真" class="nail-photo">
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
                 </div>
                 <div class="info">
-                    <div class="category-price">
-                        <span class="category">マニキュア</span>
-                        <span class="price">¥396</span>
-                    </div>
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥396</span></div>
                     <div class="brand">CANMAKE</div>
                     <div class="name">グレージュ</div>
                     <a href="#example-2" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #f8bbd0;"></div>
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥440</span></div>
+                    <div class="brand">CANMAKE</div>
+                    <div class="name">スイートコーラル</div>
+                    <a href="#example-3" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #ffcdd2;"></div>
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,320</span></div>
+                    <div class="brand">OMD</div>
+                    <div class="name">ミルキーレッド</div>
+                    <a href="#example-4" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #e1bee7;"></div>
+                    <img src="https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥385</span></div>
+                    <div class="brand">pa</div>
+                    <div class="name">ラ벤ダーパープル</div>
+                    <a href="#example-5" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #b2dfdb;"></div>
+                    <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥880</span></div>
+                    <div class="brand">NAIL HOLIC</div>
+                    <div class="name">ミントグリーン</div>
+                    <a href="#example-6" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #b3e5fc;"></div>
+                    <img src="https://images.unsplash.com/photo-1599459166150-616934c3c39a?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,100</span></div>
+                    <div class="brand">HOMEI</div>
+                    <div class="name">アイスブルー</div>
+                    <a href="#example-7" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #fff9c4;"></div>
+                    <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥396</span></div>
+                    <div class="brand">CANMAKE</div>
+                    <div class="name">シアーレモン</div>
+                    <a href="#example-8" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #ffe0b2;"></div>
+                    <img src="https://images.unsplash.com/photo-1563178406-4cdc2923acbc?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥396</span></div>
+                    <div class="brand">CANMAKE</div>
+                    <div class="name">アプリコット</div>
+                    <a href="#example-1" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #d1c4e9;"></div>
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,210</span></div>
+                    <div class="brand">Gel Me 1</div>
+                    <div class="name">ペールライラック</div>
+                    <a href="#example-2" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #c8e6c9;"></div>
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥330</span></div>
+                    <div class="brand">ParaDo</div>
+                    <div class="name">ピスタチオ</div>
+                    <a href="#example-3" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #ffccbc;"></div>
+                    <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,100</span></div>
+                    <div class="brand">JellMeCho</div>
+                    <div class="name">サーモンベージュ</div>
+                    <a href="#example-4" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #cfd8dc;"></div>
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥396</span></div>
+                    <div class="brand">CANMAKE</div>
+                    <div class="name">スモーキーブルー</div>
+                    <a href="#example-5" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #bcaaa4;"></div>
+                    <img src="https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥880</span></div>
+                    <div class="brand">NAIL HOLIC</div>
+                    <div class="name">ココアブラウン</div>
+                    <a href="#example-6" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #b71c1c;"></div>
+                    <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥2,750</span></div>
+                    <div class="brand">uka</div>
+                    <div class="name">レッドスタッズ</div>
+                    <a href="#example-7" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #37474f;"></div>
+                    <img src="https://images.unsplash.com/photo-1599459166150-616934c3c39a?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥880</span></div>
+                    <div class="brand">NAIL HOLIC</div>
+                    <div class="name">ダークチャコール</div>
+                    <a href="#example-8" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #d7ccc8;"></div>
+                    <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,100</span></div>
+                    <div class="brand">HOMEI</div>
+                    <div class="name">ヌーディベージュ</div>
+                    <a href="#example-1" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #ffebee;"></div>
+                    <img src="https://images.unsplash.com/photo-1563178406-4cdc2923acbc?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥396</span></div>
+                    <div class="brand">CANMAKE</div>
+                    <div class="name">ミルキーホワイト</div>
+                    <a href="#example-2" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #fff3e0;"></div>
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥330</span></div>
+                    <div class="brand">ParaDo</div>
+                    <div class="name">クリアゴールド</div>
+                    <a href="#example-3" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #fce4ec;"></div>
+                    <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=300&q=80" alt="写真" class="nail-photo">
+                </div>
+                <div class="info">
+                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,320</span></div>
+                    <div class="brand">Gel Me 1</div>
+                    <div class="name">ローズピンク</div>
+                    <a href="#example-4" class="link-btn" onclick="jumpToExample('examples')">この色のネイル例を見る →</a>
                 </div>
             </div>
         </div>
@@ -215,16 +424,57 @@
             <div class="card" id="example-1">
                 <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=600&q=80" alt="ネイル例1" class="example-img">
                 <div class="example-info">
-                    <div class="example-title">春のシアーピンクニュアンスネイル</div>
+                    <div class="example-title">春のシアーピンクニュアンス</div>
                     <div class="used-colors">使用カラー: JellMeCho シアーピンク 他</div>
                 </div>
             </div>
-
             <div class="card" id="example-2">
                 <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" alt="ネイル例2" class="example-img">
                 <div class="example-info">
                     <div class="example-title">大人シンプル グレージュワンカラー</div>
                     <div class="used-colors">使用カラー: CANMAKE グレージュ</div>
+                </div>
+            </div>
+            <div class="card" id="example-3">
+                <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80" alt="ネイル例3" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">爽やかピスタチオ＆ゴールド</div>
+                    <div class="used-colors">使用カラー: ParaDo ピスタチオ</div>
+                </div>
+            </div>
+            <div class="card" id="example-4">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" alt="ネイル例4" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">ツヤ感ミルキーレッドのワンホン風</div>
+                    <div class="used-colors">使用カラー: OMD ミルキーレッド</div>
+                </div>
+            </div>
+            <div class="card" id="example-5">
+                <img src="https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=600&q=80" alt="ネイル例5" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">ラベンダー＆スモーキーブルー</div>
+                    <div class="used-colors">使用カラー: pa ラベンダーパープル</div>
+                </div>
+            </div>
+            <div class="card" id="example-6">
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80" alt="ネイル例6" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">秋めくココアブラウンのグラデ</div>
+                    <div class="used-colors">使用カラー: NAIL HOLIC ココアブラウン</div>
+                </div>
+            </div>
+            <div class="card" id="example-7">
+                <img src="https://images.unsplash.com/photo-1599459166150-616934c3c39a?auto=format&fit=crop&w=600&q=80" alt="ネイル例7" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">ボルドーアクセントの大人レディ</div>
+                    <div class="used-colors">使用カラー: uka レッドスタッズ</div>
+                </div>
+            </div>
+            <div class="card" id="example-8">
+                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80" alt="ネイル例8" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">ダークチャコールとシアーレモン</div>
+                    <div class="used-colors">使用カラー: NAIL HOLIC ダークチャコール</div>
                 </div>
             </div>
         </div>
@@ -241,13 +491,12 @@
             window.scrollTo(0, 0);
         }
 
-        // カラー一覧から「ネイル例」タブへ移動しつつ該当箇所へスクロールする関数
+        // カラー一覧から「ネイル例」タブへ移動しつつ該当箇所へジャンプする関数
         function jumpToExample(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
-            // ネイル例のタブボタンをアクティブにする
             const buttons = document.querySelectorAll('.tab-btn');
             buttons[1].classList.add('active');
         }
