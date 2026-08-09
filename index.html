@@ -83,20 +83,21 @@
             box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
 
-        /* メイン切り替え用ボタン */
+        /* メイン切り替え用ボタン (3つに拡張) */
         .main-mode-tabs {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
             border-bottom: 2px solid #eee;
             padding-bottom: 15px;
+            flex-wrap: wrap;
         }
         .mode-btn {
             background: none;
             border: 2px solid var(--primary);
             color: var(--primary);
-            padding: 6px 18px;
+            padding: 6px 16px;
             font-size: 14px;
             font-weight: bold;
             border-radius: 8px;
@@ -121,6 +122,30 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
+        }
+
+        /* 「やりたいネイル」専用の写真メイングリッド */
+        .wish-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .wish-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+        .wish-card:hover {
+            transform: translateY(-3px);
+        }
+        .wish-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            cursor: pointer;
         }
 
         .card {
@@ -316,9 +341,11 @@
 
     <h1>My Nail Collection</h1>
 
+    <!-- メイン切り替え用ボタン -->
     <div class="main-mode-tabs">
         <button class="mode-btn active" onclick="switchMainMode('colors')">🎨 カラー一覧</button>
         <button class="mode-btn" onclick="switchMainMode('examples')">💅 ネイル例</button>
+        <button class="mode-btn" onclick="switchMainMode('wish')">✨ やりたいネイル</button>
     </div>
 
     <!-- フリーワード検索バー -->
@@ -409,19 +436,31 @@
     <!-- ネイル例セクション -->
     <div id="examplesSection" class="content-section">
         <div class="grid">
-            <div class="card example-card" data-color="シiarピンク" data-title="春のシアーピンクニュアンス">
+            <div class="card example-card" data-color="シアーピンク">
                 <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
                     <div class="example-title">春のシアーピンクニュアンス</div>
                     <div class="used-colors">使用カラー: シアーピンク</div>
                 </div>
             </div>
-            <div class="card example-card" data-color="ギャラクシーシルバー" data-title="輝くギャラクシーマグネットネイル">
+            <div class="card example-card" data-color="ギャラクシーシルバー">
                 <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
                     <div class="example-title">輝くギャラクシーマグネットネイル</div>
                     <div class="used-colors">使用カラー: ギャラクシーシルバー</div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- やりたいネイルセクション（写真のみ） -->
+    <div id="wishSection" class="content-section">
+        <div class="wish-grid">
+            <div class="wish-card">
+                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" class="wish-img">
+            </div>
+            <div class="wish-card">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="wish-img">
             </div>
         </div>
     </div>
@@ -448,19 +487,30 @@
             document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
 
             const searchContainer = document.getElementById('searchContainer');
+            const attributeTabs = document.getElementById('attributeTabs');
+            const filterStatus = document.getElementById('filterStatus');
 
             if (mode === 'colors') {
                 document.getElementById('colorsSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[0].classList.add('active');
-                document.getElementById('attributeTabs').style.display = 'flex';
+                attributeTabs.style.display = 'flex';
                 searchContainer.style.display = 'flex';
-            } else {
+            } else if (mode === 'examples') {
                 document.getElementById('examplesSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[1].classList.add('active');
-                document.getElementById('attributeTabs').style.display = 'none';
+                attributeTabs.style.display = 'none';
                 searchContainer.style.display = 'none';
+                filterStatus.classList.remove('active');
+            } else if (mode === 'wish') {
+                document.getElementById('wishSection').classList.add('active');
+                document.querySelectorAll('.mode-btn')[2].classList.add('active');
+                attributeTabs.style.display = 'none';
+                searchContainer.style.display = 'none';
+                filterStatus.classList.remove('active');
             }
-            clearFilter();
+            if (mode === 'colors') {
+                applyFilters();
+            }
             window.scrollTo(0, 0);
         }
 
@@ -494,7 +544,6 @@
             window.scrollTo(0, 0);
         }
 
-        // 属性タブとフリーワード検索を同時に考慮して絞り込む
         function applyFilters() {
             const cards = document.querySelectorAll('.color-card');
             const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -502,11 +551,9 @@
 
             cards.forEach(card => {
                 const attr = card.getAttribute('data-attribute');
-                const cardText = card.innerText.toLowerCase(); // カード内の全テキスト（ブランド名・商品名・品番など）を対象にする
+                const cardText = card.innerText.toLowerCase();
 
-                // 属性の条件一致
                 const matchesAttr = (currentAttribute === 'すべて' || attr === currentAttribute);
-                // 検索ワードの条件一致（空白区切りの複数ワードにも対応可、または部分一致）
                 const matchesSearch = (!searchQuery || cardText.includes(searchQuery));
 
                 if (matchesAttr && matchesSearch) {
