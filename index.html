@@ -26,6 +26,38 @@
             margin-bottom: 20px;
         }
 
+        /* フリーワード検索バー */
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            gap: 8px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: #fff;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+        .search-clear-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        .search-clear-btn:hover {
+            color: var(--text);
+        }
+
         /* 属性タブナビゲーション */
         .tabs {
             display: flex;
@@ -56,7 +88,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #eee;
             padding-bottom: 15px;
         }
@@ -289,6 +321,12 @@
         <button class="mode-btn" onclick="switchMainMode('examples')">💅 ネイル例</button>
     </div>
 
+    <!-- フリーワード検索バー -->
+    <div id="searchContainer" class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 ブランド名、商品名、品番で検索..." oninput="handleSearch()">
+        <button id="searchClearBtn" class="search-clear-btn" style="display:none;" onclick="clearSearchInput()">クリア</button>
+    </div>
+
     <!-- 属性タブ -->
     <div id="attributeTabs" class="tabs">
         <button class="tab-btn active" onclick="filterByAttribute('すべて')">すべて</button>
@@ -371,14 +409,14 @@
     <!-- ネイル例セクション -->
     <div id="examplesSection" class="content-section">
         <div class="grid">
-            <div class="card example-card" data-color="シアーピンク">
+            <div class="card example-card" data-color="シiarピンク" data-title="春のシアーピンクニュアンス">
                 <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
                     <div class="example-title">春のシアーピンクニュアンス</div>
                     <div class="used-colors">使用カラー: シアーピンク</div>
                 </div>
             </div>
-            <div class="card example-card" data-color="ギャラクシーシルバー">
+            <div class="card example-card" data-color="ギャラクシーシルバー" data-title="輝くギャラクシーマグネットネイル">
                 <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
                     <div class="example-title">輝くギャラクシーマグネットネイル</div>
@@ -403,26 +441,46 @@
     </div>
 
     <script>
+        let currentAttribute = 'すべて';
+
         function switchMainMode(mode) {
             document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
+
+            const searchContainer = document.getElementById('searchContainer');
 
             if (mode === 'colors') {
                 document.getElementById('colorsSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[0].classList.add('active');
                 document.getElementById('attributeTabs').style.display = 'flex';
+                searchContainer.style.display = 'flex';
             } else {
                 document.getElementById('examplesSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[1].classList.add('active');
                 document.getElementById('attributeTabs').style.display = 'none';
+                searchContainer.style.display = 'none';
             }
             clearFilter();
             window.scrollTo(0, 0);
         }
 
+        // フリーワード検索の処理
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('searchClearBtn');
+            clearBtn.style.display = query ? 'block' : 'none';
+
+            applyFilters();
+        }
+
+        function clearSearchInput() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchClearBtn').style.display = 'none';
+            applyFilters();
+        }
+
         function filterByAttribute(attr) {
-            const cards = document.querySelectorAll('.color-card');
-            let matchCount = 0;
+            currentAttribute = attr;
 
             document.querySelectorAll('.tabs .tab-btn').forEach(btn => {
                 if (btn.innerText === attr) {
@@ -432,8 +490,26 @@
                 }
             });
 
+            applyFilters();
+            window.scrollTo(0, 0);
+        }
+
+        // 属性タブとフリーワード検索を同時に考慮して絞り込む
+        function applyFilters() {
+            const cards = document.querySelectorAll('.color-card');
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            let matchCount = 0;
+
             cards.forEach(card => {
-                if (attr === 'すべて' || card.getAttribute('data-attribute') === attr) {
+                const attr = card.getAttribute('data-attribute');
+                const cardText = card.innerText.toLowerCase(); // カード内の全テキスト（ブランド名・商品名・品番など）を対象にする
+
+                // 属性の条件一致
+                const matchesAttr = (currentAttribute === 'すべて' || attr === currentAttribute);
+                // 検索ワードの条件一致（空白区切りの複数ワードにも対応可、または部分一致）
+                const matchesSearch = (!searchQuery || cardText.includes(searchQuery));
+
+                if (matchesAttr && matchesSearch) {
                     card.style.display = 'flex';
                     matchCount++;
                 } else {
@@ -444,27 +520,31 @@
             const filterStatus = document.getElementById('filterStatus');
             const filterText = document.getElementById('filterText');
 
-            if (attr === 'すべて') {
+            if (currentAttribute === 'すべて' && !searchQuery) {
                 filterStatus.classList.remove('active');
             } else {
-                filterText.innerText = `「${attr}」属性の商品を表示中 (${matchCount}件)`;
+                let statusMsg = '';
+                if (currentAttribute !== 'すべて') statusMsg += `属性:「${currentAttribute}」`;
+                if (searchQuery) statusMsg += (statusMsg ? ' / ' : '') + `検索:「${searchQuery}」`;
+                
+                filterText.innerText = `${statusMsg} の結果 (${matchCount}件)`;
                 filterStatus.classList.add('active');
             }
-            window.scrollTo(0, 0);
         }
 
         function clearFilter() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchClearBtn').style.display = 'none';
             filterByAttribute('すべて');
         }
 
-        // モーダルを開く（ブランド、商品番号、商品名、属性、価格、カラー、公式URL、写真リスト）
+        // モーダルを開く
         function openModal(brand, itemCode, name, category, price, colorCode, officialUrl, photos) {
             document.getElementById('modalBrandCode').innerHTML = `<span class="brand">${brand}</span><span class="item-code">No. ${itemCode}</span>`;
             document.getElementById('modalName').innerText = name;
             document.getElementById('modalMeta').innerText = `属性: ${category} / 価格: ${price}`;
             document.getElementById('modalChip').style.backgroundColor = colorCode;
 
-            // 公式ページリンクの生成
             const linkContainer = document.getElementById('modalOfficialLinkContainer');
             if (officialUrl) {
                 linkContainer.innerHTML = `<a href="${officialUrl}" target="_blank" class="official-link">🌐 公式ページを見る ↗</a>`;
