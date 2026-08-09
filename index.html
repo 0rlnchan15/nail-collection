@@ -83,7 +83,7 @@
             box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
 
-        /* メイン切り替え用ボタン (3つに拡張) */
+        /* メイン切り替え用ボタン */
         .main-mode-tabs {
             display: flex;
             justify-content: center;
@@ -374,59 +374,17 @@
     <div id="colorsSection" class="content-section active">
         <div class="grid" id="colorGrid">
             
-            <!-- 商品 1 -->
-            <div class="card color-card" data-attribute="単色" onclick="openModal('JellMeCho', 'JMC-01', 'シアーピンク', '単色', '¥1,100', '#fce4ec', 'https://gelmecho.example.com', ['https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80'])">
+            <!-- Seria レモンイエロー -->
+            <div class="card color-card" data-attribute="単色" onclick="openModal('Seria', 'SEG0013', 'レモンイエロー', '単色', '¥110', '#fff466', '', ['data:image/jpeg;base64,9j/4AAQSkZJRgABAQAAAQABAAD...'])">
                 <div class="image-gallery">
-                    <div class="color-chip" style="background-color: #fce4ec;"></div>
-                    <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=300&q=80" class="nail-photo">
+                    <div class="color-chip" style="background-color: #fff466;"></div>
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." class="nail-photo" alt="レモンイエロー">
                 </div>
                 <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">単色</span><span class="price">¥1,100</span></div>
-                    <div class="brand-code"><span class="brand">JellMeCho</span><span class="item-code">No. JMC-01</span></div>
-                    <div class="name">シアーピンク</div>
-                    <button class="link-btn" onclick="jumpToExample('シアーピンク')">この色のネイル例を見る →</button>
-                </div>
-            </div>
-
-            <!-- 商品 2 -->
-            <div class="card color-card" data-attribute="マグネット" onclick="openModal('OMD', 'OMD-M03', 'ギャラクシーシルバー', 'マグネット', '¥1,430', '#e0e0e0', 'https://omd.example.com', ['https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=400&q=80'])">
-                <div class="image-gallery">
-                    <div class="color-chip" style="background-color: #e0e0e0;"></div>
-                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=300&q=80" class="nail-photo">
-                </div>
-                <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">マグネット</span><span class="price">¥1,430</span></div>
-                    <div class="brand-code"><span class="brand">OMD</span><span class="item-code">No. OMD-M03</span></div>
-                    <div class="name">ギャラクシーシルバー</div>
-                    <button class="link-btn" onclick="jumpToExample('ギャラクシーシルバー')">この色のネイル例を見る →</button>
-                </div>
-            </div>
-
-            <!-- 商品 3 -->
-            <div class="card color-card" data-attribute="ベース" onclick="openModal('BellaForma', 'BF-BASE', 'ピールオフベースジェル', 'ベース', '¥1,760', '#f5f5f5', 'https://bellaforma.example.com', ['https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=400&q=80'])">
-                <div class="image-gallery">
-                    <div class="color-chip" style="background-color: #f5f5f5;"></div>
-                    <img src="https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=300&q=80" class="nail-photo">
-                </div>
-                <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">ベース</span><span class="price">¥1,760</span></div>
-                    <div class="brand-code"><span class="brand">BellaForma</span><span class="item-code">No. BF-BASE</span></div>
-                    <div class="name">ピールオフベースジェル</div>
-                    <button class="link-btn" onclick="jumpToExample('ピールオフベースジェル')">この色のネイル例を見る →</button>
-                </div>
-            </div>
-
-            <!-- 商品 4 -->
-            <div class="card color-card" data-attribute="トップ" onclick="openModal('PREGEL', 'PRE-TOP', 'ノンワイプクリアトップ', 'トップ', '¥1,650', '#ffffff', 'https://pregel.example.com', ['https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80'])">
-                <div class="image-gallery">
-                    <div class="color-chip" style="background-color: #ffffff;"></div>
-                    <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80" class="nail-photo">
-                </div>
-                <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">トップ</span><span class="price">¥1,650</span></div>
-                    <div class="brand-code"><span class="brand">PREGEL</span><span class="item-code">No. PRE-TOP</span></div>
-                    <div class="name">ノンワイプクリアトップ</div>
-                    <button class="link-btn" onclick="jumpToExample('ノンワイプクリアトップ')">この色のネイル例を見る →</button>
+                    <div class="category-price"><span class="category">単色</span><span class="price">¥110</span></div>
+                    <div class="brand-code"><span class="brand">Seria</span><span class="item-code">No. SEG0013</span></div>
+                    <div class="name">レモンイエロー</div>
+                    <button class="link-btn" onclick="jumpToExample('レモンイエロー')">この色のネイル例を見る →</button>
                 </div>
             </div>
 
@@ -436,18 +394,11 @@
     <!-- ネイル例セクション -->
     <div id="examplesSection" class="content-section">
         <div class="grid">
-            <div class="card example-card" data-color="シアーピンク">
-                <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=600&q=80" class="example-img">
+            <div class="card example-card" data-color="レモンイエロー">
+                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..." class="example-img" alt="レモンイエローネイル例">
                 <div class="example-info">
-                    <div class="example-title">春のシアーピンクニュアンス</div>
-                    <div class="used-colors">使用カラー: シアーピンク</div>
-                </div>
-            </div>
-            <div class="card example-card" data-color="ギャラクシーシルバー">
-                <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80" class="example-img">
-                <div class="example-info">
-                    <div class="example-title">輝くギャラクシーマグネットネイル</div>
-                    <div class="used-colors">使用カラー: ギャラクシーシルバー</div>
+                    <div class="example-title">レモンイエローと星パーツのネイル</div>
+                    <div class="used-colors">使用カラー: レモンイエロー</div>
                 </div>
             </div>
         </div>
@@ -456,12 +407,7 @@
     <!-- やりたいネイルセクション（写真のみ） -->
     <div id="wishSection" class="content-section">
         <div class="wish-grid">
-            <div class="wish-card">
-                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" class="wish-img">
-            </div>
-            <div class="wish-card">
-                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="wish-img">
-            </div>
+            <!-- 必要に応じて追加できます -->
         </div>
     </div>
 
@@ -514,7 +460,6 @@
             window.scrollTo(0, 0);
         }
 
-        // フリーワード検索の処理
         function handleSearch() {
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
             const clearBtn = document.getElementById('searchClearBtn');
@@ -585,7 +530,6 @@
             filterByAttribute('すべて');
         }
 
-        // モーダルを開く
         function openModal(brand, itemCode, name, category, price, colorCode, officialUrl, photos) {
             document.getElementById('modalBrandCode').innerHTML = `<span class="brand">${brand}</span><span class="item-code">No. ${itemCode}</span>`;
             document.getElementById('modalName').innerText = name;
