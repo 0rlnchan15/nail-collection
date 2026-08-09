@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Nail Collection - Interactive</title>
+    <title>My Nail Collection - Attribute Filter</title>
     <style>
         :root {
             --primary: #d4a373;
@@ -26,18 +26,19 @@
             margin-bottom: 20px;
         }
 
-        /* タブナビゲーション */
+        /* 属性タブナビゲーション（横スクロール対応） */
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
         .tab-btn {
             background-color: #eee;
             border: none;
-            padding: 10px 24px;
-            font-size: 15px;
+            padding: 8px 16px;
+            font-size: 14px;
             font-weight: bold;
             border-radius: 20px;
             cursor: pointer;
@@ -50,13 +51,38 @@
             box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
 
+        /* メイン・ネイル例のセクション切り替え用タブ */
+        .main-mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+        .mode-btn {
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
         /* 画面の切り替え */
-        .tab-content {
+        .content-section {
             display: none;
             max-width: 1200px;
             margin: 0 auto;
         }
-        .tab-content.active {
+        .content-section.active {
             display: block;
         }
 
@@ -132,7 +158,6 @@
             color: #444;
         }
         
-        /* ネイル例へのリンクボタン */
         .link-btn {
             margin-top: 8px;
             background-color: #f8f9fa;
@@ -144,6 +169,7 @@
             color: #555;
             text-decoration: none;
             transition: background 0.2s;
+            cursor: pointer;
         }
         .link-btn:hover {
             background-color: var(--primary-light);
@@ -170,7 +196,7 @@
             color: var(--gray);
         }
 
-        /* モーダル（詳細ポップアップ） */
+        /* モーダル */
         .modal {
             display: none;
             position: fixed;
@@ -238,88 +264,163 @@
 
     <h1>My Nail Collection</h1>
 
-    <!-- 切り替えタブ -->
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('colors')">🎨 カラー一覧</button>
-        <button class="tab-btn" onclick="switchTab('examples')">💅 ネイル例</button>
+    <!-- 上部メイン切り替え（カラー一覧 vs ネイル例） -->
+    <div class="main-mode-tabs">
+        <button class="mode-btn active" onclick="switchMainMode('colors')">🎨 カラー一覧</button>
+        <button class="mode-btn" onclick="switchMainMode('examples')">💅 ネイル例</button>
     </div>
 
-    <!-- 絞り中インフォメーション -->
+    <!-- 属性（カテゴリ）絞り込みタブ -->
+    <div id="attributeTabs" class="tabs">
+        <button class="tab-btn active" onclick="filterByAttribute('すべて')">すべて</button>
+        <button class="tab-btn" onclick="filterByAttribute('ベース')">ベース</button>
+        <button class="tab-btn" onclick="filterByAttribute('トップ')">トップ</button>
+        <button class="tab-btn" onclick="filterByAttribute('単色')">単色</button>
+        <button class="tab-btn" onclick="filterByAttribute('マグネット')">マグネット</button>
+        <button class="tab-btn" onclick="filterByAttribute('フラッシュ')">フラッシュ</button>
+        <button class="tab-btn" onclick="filterByAttribute('その他')">その他</button>
+    </div>
+
+    <!-- 絞り込み中インフォメーション -->
     <div id="filterStatus" class="filter-status">
         <span id="filterText"></span> 
         <button onclick="clearFilter()" style="margin-left: 10px; border:none; background:none; color:#bc6c25; font-weight:bold; cursor:pointer;">× すべて表示に戻す</button>
     </div>
 
-    <!-- 【タブ1】カラー一覧 -->
-    <div id="colors" class="tab-content active">
-        <div class="grid">
-            <!-- 1 -->
-            <div class="card" onclick="openModal('JellMeCho', 'シアーピンク', 'ジェル', '¥1,100', '#fce4ec', ['https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80'])">
+    <!-- 【セクション1】カラー一覧（各カードに data-attribute を付与） -->
+    <div id="colorsSection" class="content-section active">
+        <div class="grid" id="colorGrid">
+            
+            <!-- 1: 単色 -->
+            <div class="card color-card" data-attribute="単色" onclick="openModal('JellMeCho', 'シアーピンク', '単色', '¥1,100', '#fce4ec', ['https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80'])">
                 <div class="image-gallery">
                     <div class="color-chip" style="background-color: #fce4ec;"></div>
                     <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=300&q=80" class="nail-photo">
                 </div>
                 <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">ジェル</span><span class="price">¥1,100</span></div>
+                    <div class="category-price"><span class="category">単色</span><span class="price">¥1,100</span></div>
                     <div class="brand">JellMeCho</div>
                     <div class="name">シアーピンク</div>
-                    <button class="link-btn" onclick="filterByColor('シアーピンク')">この色のネイル例を見る →</button>
+                    <button class="link-btn" onclick="jumpToExample('シアーピンク')">この色のネイル例を見る →</button>
                 </div>
             </div>
-            <!-- 2 -->
-            <div class="card" onclick="openModal('CANMAKE', 'グレージュ', 'マニキュア', '¥396', '#d7ccc8', ['https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=400&q=80'])">
+
+            <!-- 2: 単色 -->
+            <div class="card color-card" data-attribute="単色" onclick="openModal('CANMAKE', 'グレージュ', '単色', '¥396', '#d7ccc8', ['https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=400&q=80'])">
                 <div class="image-gallery">
                     <div class="color-chip" style="background-color: #d7ccc8;"></div>
                     <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=300&q=80" class="nail-photo">
                 </div>
                 <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥396</span></div>
+                    <div class="category-price"><span class="category">単色</span><span class="price">¥396</span></div>
                     <div class="brand">CANMAKE</div>
                     <div class="name">グレージュ</div>
-                    <button class="link-btn" onclick="filterByColor('グレージュ')">この色のネイル例を見る →</button>
+                    <button class="link-btn" onclick="jumpToExample('グレージュ')">この色のネイル例を見る →</button>
                 </div>
             </div>
-            <!-- 3 -->
-            <div class="card" onclick="openModal('CANMAKE', 'スイートコーラル', 'マニキュア', '¥440', '#f8bbd0', ['https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=400&q=80'])">
+
+            <!-- 3: マグネット -->
+            <div class="card color-card" data-attribute="マグネット" onclick="openModal('OMD', 'ギャラクシーシルバー', 'マグネット', '¥1,430', '#e0e0e0', ['https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=400&q=80'])">
                 <div class="image-gallery">
-                    <div class="color-chip" style="background-color: #f8bbd0;"></div>
+                    <div class="color-chip" style="background-color: #e0e0e0;"></div>
                     <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=300&q=80" class="nail-photo">
                 </div>
                 <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">マニキュア</span><span class="price">¥440</span></div>
-                    <div class="brand">CANMAKE</div>
-                    <div class="name">スイートコーラル</div>
-                    <button class="link-btn" onclick="filterByColor('スイートコーラル')">この色のネイル例を見る →</button>
+                    <div class="category-price"><span class="category">マグネット</span><span class="price">¥1,430</span></div>
+                    <div class="brand">OMD</div>
+                    <div class="name">ギャラクシーシルバー</div>
+                    <button class="link-btn" onclick="jumpToExample('ギャラクシーシルバー')">この色のネイル例を見る →</button>
                 </div>
             </div>
+
+            <!-- 4: フラッシュ -->
+            <div class="card color-card" data-attribute="フラッシュ" onclick="openModal('HOMEI', 'シャインスターフラッシュ', 'フラッシュ', '¥1,320', '#b3e5fc', ['https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80'])">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #b3e5fc;"></div>
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=300&q=80" class="nail-photo">
+                </div>
+                <div class="info" onclick="event.stopPropagation()">
+                    <div class="category-price"><span class="category">フラッシュ</span><span class="price">¥1,320</span></div>
+                    <div class="brand">HOMEI</div>
+                    <div class="name">シャインスターフラッシュ</div>
+                    <button class="link-btn" onclick="jumpToExample('シャインスターフラッシュ')">この色のネイル例を見る →</button>
+                </div>
+            </div>
+
+            <!-- 5: ベース -->
+            <div class="card color-card" data-attribute="ベース" onclick="openModal('BellaForma', 'ピールオフベースジェル', 'ベース', '¥1,760', '#f5f5f5', ['https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=400&q=80'])">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #f5f5f5;"></div>
+                    <img src="https://images.unsplash.com/photo-1631730486784-5456247239f1?auto=format&fit=crop&w=300&q=80" class="nail-photo">
+                </div>
+                <div class="info" onclick="event.stopPropagation()">
+                    <div class="category-price"><span class="category">ベース</span><span class="price">¥1,760</span></div>
+                    <div class="brand">BellaForma</div>
+                    <div class="name">ピールオフベースジェル</div>
+                    <button class="link-btn" onclick="jumpToExample('ピールオフベースジェル')">この色のネイル例を見る →</button>
+                </div>
+            </div>
+
+            <!-- 6: トップ -->
+            <div class="card color-card" data-attribute="トップ" onclick="openModal('PREGEL', 'ノンワイプクリアトップ', 'トップ', '¥1,650', '#ffffff', ['https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80'])">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #ffffff;"></div>
+                    <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80" class="nail-photo">
+                </div>
+                <div class="info" onclick="event.stopPropagation()">
+                    <div class="category-price"><span class="category">トップ</span><span class="price">¥1,650</span></div>
+                    <div class="brand">PREGEL</div>
+                    <div class="name">ノンワイプクリアトップ</div>
+                    <button class="link-btn" onclick="jumpToExample('ノンワイプクリアトップ')">この色のネイル例を見る →</button>
+                </div>
+            </div>
+
+            <!-- 7: その他 -->
+            <div class="card color-card" data-attribute="その他" onclick="openModal('NAIL HOLIC', 'オーロラホロパーツ', 'その他', '¥880', '#fff9c4', ['https://images.unsplash.com/photo-1599459166150-616934c3c39a?auto=format&fit=crop&w=400&q=80'])">
+                <div class="image-gallery">
+                    <div class="color-chip" style="background-color: #fff9c4;"></div>
+                    <img src="https://images.unsplash.com/photo-1599459166150-616934c3c39a?auto=format&fit=crop&w=300&q=80" class="nail-photo">
+                </div>
+                <div class="info" onclick="event.stopPropagation()">
+                    <div class="category-price"><span class="category">その他</span><span class="price">¥880</span></div>
+                    <div class="brand">NAIL HOLIC</div>
+                    <div class="name">オーロラホロパーツ</div>
+                    <button class="link-btn" onclick="jumpToExample('オーロラホロパーツ')">この色のネイル例を見る →</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- 【タブ2】ネイル例 -->
-    <div id="examples" class="tab-content">
+    <!-- 【セクション2】ネイル例 -->
+    <div id="examplesSection" class="content-section">
         <div class="grid">
-            <!-- 例1 -->
             <div class="card example-card" data-color="シアーピンク">
                 <img src="https://images.unsplash.com/photo-1632345031435-877ff6c90d5a?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
                     <div class="example-title">春のシアーピンクニュアンス</div>
-                    <div class="used-colors">使用カラー: JellMeCho シアーピンク</div>
+                    <div class="used-colors">使用カラー: シアーピンク</div>
                 </div>
             </div>
-            <!-- 例2 -->
             <div class="card example-card" data-color="グレージュ">
                 <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
                     <div class="example-title">大人シンプル グレージュワンカラー</div>
-                    <div class="used-colors">使用カラー: CANMAKE グレージュ</div>
+                    <div class="used-colors">使用カラー: グレージュ</div>
                 </div>
             </div>
-            <!-- 例3 -->
-            <div class="card example-card" data-color="スイートコーラル">
+            <div class="card example-card" data-color="ギャラクシーシルバー">
                 <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80" class="example-img">
                 <div class="example-info">
-                    <div class="example-title">スイートコーラルのグラデーション</div>
-                    <div class="used-colors">使用カラー: CANMAKE スイートコーラル</div>
+                    <div class="example-title">輝くギャラクシーマグネットネイル</div>
+                    <div class="used-colors">使用カラー: ギャラクシーシルバー</div>
+                </div>
+            </div>
+            <div class="card example-card" data-color="シャインスターフラッシュ">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="example-img">
+                <div class="example-info">
+                    <div class="example-title">フラッシュで光る夜空ネイル</div>
+                    <div class="used-colors">使用カラー: シャインスターフラッシュ</div>
                 </div>
             </div>
         </div>
@@ -333,26 +434,77 @@
             <div id="modalBrand" class="brand" style="font-size: 12px; margin-bottom: 4px;"></div>
             <div id="modalName" style="font-size: 20px; font-weight: bold; margin-bottom: 8px;"></div>
             <div id="modalMeta" style="font-size: 13px; color: #666; margin-bottom: 16px;"></div>
-            <div style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px;">着用・商品写真ギャラリー</div>
+            <div style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px;">商品・着用写真ギャラリー</div>
             <div id="modalPhotos" class="modal-photos-grid"></div>
         </div>
     </div>
 
     <script>
-        // タブ切り替え
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+        let currentMode = 'colors'; // 'colors' または 'examples'
+
+        // メインモード（カラー一覧 / ネイル例）の切り替え
+        function switchMainMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
+
+            if (mode === 'colors') {
+                document.getElementById('colorsSection').classList.add('active');
+                document.querySelectorAll('.mode-btn')[0].classList.add('active');
+                document.getElementById('attributeTabs').style.display = 'flex'; // 属性タブを表示
+            } else {
+                document.getElementById('examplesSection').classList.add('active');
+                document.querySelectorAll('.mode-btn')[1].classList.add('active');
+                document.getElementById('attributeTabs').style.display = 'none'; // ネイル例のときは属性タブを隠す
+            }
+            clearFilter();
             window.scrollTo(0, 0);
         }
 
-        // モーダルを開く（複数写真対応）
+        // 属性ボタンによる絞り込み
+        function filterByAttribute(attr) {
+            const cards = document.querySelectorAll('.color-card');
+            let matchCount = 0;
+
+            document.querySelectorAll('.tabs .tab-btn').forEach(btn => {
+                if (btn.innerText === attr) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            cards.forEach(card => {
+                if (attr === 'すべて' || card.getAttribute('data-attribute') === attr) {
+                    card.style.display = 'flex';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const filterStatus = document.getElementById('filterStatus');
+            const filterText = document.getElementById('filterText');
+
+            if (attr === 'すべて') {
+                filterStatus.classList.remove('active');
+            } else {
+                filterText.innerText = `「${attr}」属性の商品を表示中 (${matchCount}件)`;
+                filterStatus.classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // フィルターリセット
+        function clearFilter() {
+            filterByAttribute('すべて');
+        }
+
+        // モーダルを開く
         function openModal(brand, name, category, price, colorCode, photos) {
             document.getElementById('modalBrand').innerText = brand;
             document.getElementById('modalName').innerText = name;
-            document.getElementById('modalMeta').innerText = `${category} / ${price}`;
+            document.getElementById('modalMeta').innerText = `属性: ${category} / 価格: ${price}`;
             document.getElementById('modalChip').style.backgroundColor = colorCode;
 
             const photosContainer = document.getElementById('modalPhotos');
@@ -372,15 +524,9 @@
             document.getElementById('detailModal').classList.remove('active');
         }
 
-        // カラーでネイル例を絞り込んでジャンプ
-        function filterByColor(colorName) {
-            // ネイル例タブへ移動
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('examples').classList.add('active');
-            document.querySelectorAll('.tab-btn')[1].classList.add('active');
-
-            // 絞り込み実行
+        // カラー詳細からネイル例へジャンプ
+        function jumpToExample(colorName) {
+            switchMainMode('examples');
             const cards = document.querySelectorAll('.example-card');
             cards.forEach(card => {
                 if (card.getAttribute('data-color') === colorName) {
@@ -389,18 +535,10 @@
                     card.style.display = 'none';
                 }
             });
-
-            // バナー表示
-            document.getElementById('filterText').innerText = `「${colorName}」を使用したネイル例を表示中`;
-            document.getElementById('filterStatus').classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        // 絞り込み解除
-        function clearFilter() {
-            const cards = document.querySelectorAll('.example-card');
-            cards.forEach(card => card.style.display = 'block');
-            document.getElementById('filterStatus').classList.remove('active');
+            const filterStatus = document.getElementById('filterStatus');
+            const filterText = document.getElementById('filterText');
+            filterText.innerText = `「${colorName}」に関連するネイル例を表示中`;
+            filterStatus.classList.add('active');
         }
     </script>
 
