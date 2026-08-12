@@ -309,11 +309,27 @@
             cursor: pointer;
             color: #888;
         }
-        .modal-chip {
-            height: 50px;
-            border-radius: 8px;
-            margin-bottom: 16px;
+        
+        /* モーダル内のタイトル行（商品名＋丸い色見本） */
+        .modal-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
         }
+        .modal-name-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        .modal-header-chip {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            flex-shrink: 0;
+        }
+
         .official-link {
             display: inline-block;
             margin-top: 10px;
@@ -483,7 +499,6 @@
     <div id="examplesSection" class="content-section">
         <div class="grid">
             <div class="card example-card" data-color="レモンイエロー">
-                <!-- ネイル例クリック時に使用商品情報（ブランド、品番、名前、価格、色コード等）を渡す -->
                 <img src="IMG_7571.jpeg" class="example-img" alt="レモンイエローネイル例" onclick="openExampleModal('レモンイエローを使用したネイル', ['IMG_7571.jpeg'], [{brand: 'Seria', itemCode: 'SEG0013', name: 'レモンイエロー', category: '単色', price: '¥110', colorCode: '#fff466', officialUrl: '', photos: ['bottles/seria_seg0013.png', 'IMG_7571.jpeg']}])">
                 <div class="example-info">
                     <div class="example-title">レモンイエローを使用したネイル</div>
@@ -506,9 +521,12 @@
     <div id="detailModal" class="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div id="modalChip" class="modal-chip"></div>
+            <!-- モーダルタイトル行（商品名＋丸い色見本を配置するエリア） -->
+            <div id="modalTitleRow" class="modal-title-row">
+                <div id="modalName" class="modal-name-text"></div>
+                <div id="modalHeaderChip" class="modal-header-chip" style="display: none;"></div>
+            </div>
             <div id="modalBrandCode" class="brand-code" style="font-size: 12px; margin-bottom: 4px;"></div>
-            <div id="modalName" style="font-size: 22px; font-weight: bold; margin-bottom: 4px;"></div>
             <div id="modalMeta" style="font-size: 13px; color: #666; margin-bottom: 12px;"></div>
             <div id="modalOfficialLinkContainer"></div>
             <div id="modalPhotosTitle" style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-top: 16px;">商品・着用写真ギャラリー</div>
@@ -635,9 +653,8 @@
             filterByAttribute('すべて');
         }
 
-        // カラー一覧からの通常詳細モーダル
+        // カラー一覧からの通常詳細モーダル（商品名の横に丸い色見本を表示）
         function openModal(brand, itemCode, name, category, price, colorCode, officialUrl, photos) {
-            document.getElementById('modalChip').style.display = 'block';
             document.getElementById('modalBrandCode').style.display = 'flex';
             document.getElementById('modalMeta').style.display = 'block';
             document.getElementById('modalPhotosTitle').style.display = 'block';
@@ -645,8 +662,17 @@
 
             document.getElementById('modalBrandCode').innerHTML = `<span class="brand">${brand}</span><span class="item-code">No. ${itemCode}</span>`;
             document.getElementById('modalName').innerText = name;
+            
+            // 商品名横の丸い色見本を設定・表示
+            const headerChip = document.getElementById('modalHeaderChip');
+            if (colorCode) {
+                headerChip.style.backgroundColor = colorCode;
+                headerChip.style.display = 'block';
+            } else {
+                headerChip.style.display = 'none';
+            }
+
             document.getElementById('modalMeta').innerText = `属性: ${category} / 価格: ${price}`;
-            document.getElementById('modalChip').style.backgroundColor = colorCode;
 
             const linkContainer = document.getElementById('modalOfficialLinkContainer');
             if (officialUrl) {
@@ -661,20 +687,19 @@
                 const img = document.createElement('img');
                 img.src = url;
                 img.className = 'modal-photo-item';
-                img.style.height = '350px';
                 photosContainer.appendChild(img);
             });
 
             document.getElementById('detailModal').classList.add('active');
         }
 
-        // ネイル例専用モーダル（使用商品とカラー一覧へのリンク付き）
+        // ネイル例専用モーダル
         function openExampleModal(titleName, photos, usedProducts) {
-            document.getElementById('modalChip').style.display = 'none';
             document.getElementById('modalBrandCode').style.display = 'none';
             document.getElementById('modalMeta').style.display = 'none';
             document.getElementById('modalOfficialLinkContainer').innerHTML = '';
             document.getElementById('modalPhotosTitle').style.display = 'none';
+            document.getElementById('modalHeaderChip').style.display = 'none'; // ネイル例では非表示
 
             document.getElementById('modalName').innerText = titleName;
 
@@ -684,7 +709,6 @@
                 const img = document.createElement('img');
                 img.src = url;
                 img.className = 'modal-photo-item';
-                img.style.height = '400px';
                 photosContainer.appendChild(img);
             });
 
@@ -717,11 +741,11 @@
 
         // やりたいネイルなど、商品情報がない単体画像用モーダル
         function openSingleModal(titleName, photos) {
-            document.getElementById('modalChip').style.display = 'none';
             document.getElementById('modalBrandCode').style.display = 'none';
             document.getElementById('modalMeta').style.display = 'none';
             document.getElementById('modalOfficialLinkContainer').innerHTML = '';
             document.getElementById('modalPhotosTitle').style.display = 'none';
+            document.getElementById('modalHeaderChip').style.display = 'none';
             document.getElementById('modalUsedProducts').style.display = 'none';
 
             document.getElementById('modalName').innerText = titleName;
@@ -732,7 +756,6 @@
                 const img = document.createElement('img');
                 img.src = url;
                 img.className = 'modal-photo-item';
-                img.style.height = '420px';
                 photosContainer.appendChild(img);
             });
 
