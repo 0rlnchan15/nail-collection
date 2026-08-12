@@ -143,7 +143,7 @@
         .wish-img {
             width: 100%;
             height: 280px;
-            object-fit: contain; /* 見切れ防止 */
+            object-fit: contain;
             background-color: #f8f9fa;
             display: block;
             cursor: pointer;
@@ -163,7 +163,7 @@
             transform: translateY(-3px);
         }
 
-        /* 写真エリア（高さを広げ、object-fit: containに変更して見切れを防ぐ） */
+        /* 写真エリア */
         .image-gallery {
             display: flex;
             height: 220px;
@@ -175,7 +175,7 @@
             flex: 1;
             min-width: 100%;
             height: 100%;
-            object-fit: contain; /* 見切れないように調整 */
+            object-fit: contain;
         }
         .nail-photo.multiple {
             min-width: 50%;
@@ -220,7 +220,6 @@
             font-weight: bold;
         }
         
-        /* 商品名とカラーチップを横並びにするスタイル */
         .name-row {
             display: flex;
             align-items: center;
@@ -261,7 +260,7 @@
         .example-img {
             width: 100%;
             height: 260px;
-            object-fit: contain; /* 見切れ防止 */
+            object-fit: contain;
             background-color: #f8f9fa;
             cursor: pointer;
         }
@@ -278,16 +277,16 @@
             color: var(--gray);
         }
 
-        /* モーダル */
+        /* モーダル（2倍近く大きく表示できるようサイズとレイアウトを拡大） */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 20px;
+            padding: 15px;
         }
         .modal.active {
             display: flex;
@@ -295,23 +294,23 @@
         .modal-content {
             background: #fff;
             border-radius: 16px;
-            max-width: 500px;
+            max-width: 650px;
             width: 100%;
-            padding: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 28px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             position: relative;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
         }
         .close-btn {
             position: absolute;
             top: 16px; right: 20px;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             color: #888;
         }
         .modal-chip {
-            height: 80px;
+            height: 50px;
             border-radius: 8px;
             margin-bottom: 16px;
         }
@@ -331,18 +330,19 @@
         .official-link:hover {
             background-color: #bc6c25;
         }
+        /* モーダル内の画像を従来より大きく（高さ約320px、単体なら420pxに拡大） */
         .modal-photos-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 15px;
             margin-top: 15px;
         }
         .modal-photo-item {
             width: 100%;
-            height: 160px;
+            height: 320px;
             object-fit: contain;
             background-color: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid #eee;
         }
         .filter-status {
@@ -445,7 +445,7 @@
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div id="modalChip" class="modal-chip"></div>
             <div id="modalBrandCode" class="brand-code" style="font-size: 12px; margin-bottom: 4px;"></div>
-            <div id="modalName" style="font-size: 20px; font-weight: bold; margin-bottom: 4px;"></div>
+            <div id="modalName" style="font-size: 22px; font-weight: bold; margin-bottom: 4px;"></div>
             <div id="modalMeta" style="font-size: 13px; color: #666; margin-bottom: 12px;"></div>
             <div id="modalOfficialLinkContainer"></div>
             <div id="modalPhotosTitle" style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-top: 16px;">商品・着用写真ギャラリー</div>
@@ -594,13 +594,13 @@
                 const img = document.createElement('img');
                 img.src = url;
                 img.className = 'modal-photo-item';
+                img.style.height = '350px'; // 2倍近く大きく表示
                 photosContainer.appendChild(img);
             });
 
             document.getElementById('detailModal').classList.add('active');
         }
 
-        // ネイル例ややりたいネイルの単体画像用モーダル
         function openSingleModal(titleName, photos) {
             document.getElementById('modalChip').style.display = 'none';
             document.getElementById('modalBrandCode').style.display = 'none';
@@ -616,8 +616,7 @@
                 const img = document.createElement('img');
                 img.src = url;
                 img.className = 'modal-photo-item';
-                // 単体画像の場合はグリッド感を消して少し大きく見せる
-                img.style.height = '280px';
+                img.style.height = '420px'; // 単体ならさらに大きく迫力あるサイズに
                 photosContainer.appendChild(img);
             });
 
