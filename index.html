@@ -162,21 +162,25 @@
             transform: translateY(-3px);
         }
 
+        /* 写真エリアの変更（左側に表示、複数なら並べる、1つなら白背景） */
         .image-gallery {
             display: flex;
-            height: 140px;
+            height: 160px;
+            background-color: #fff;
             border-bottom: 1px solid #f0f0f0;
-        }
-        .color-chip {
-            flex: 1;
-            height: 100%;
+            overflow-x: auto;
         }
         .nail-photo {
             flex: 1;
+            min-width: 100%;
             height: 100%;
             object-fit: cover;
-            border-left: 1px solid #fff;
         }
+        .nail-photo.multiple {
+            min-width: 50%;
+            border-right: 1px solid #fff;
+        }
+
         .info {
             padding: 16px;
             display: flex;
@@ -214,10 +218,24 @@
             color: #666;
             font-weight: bold;
         }
+        
+        /* 商品名とカラーチップを横並びにするスタイル */
+        .name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
         .name {
             font-size: 15px;
             font-weight: bold;
             color: #444;
+        }
+        .inline-color-chip {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            flex-shrink: 0;
         }
         
         .link-btn {
@@ -376,16 +394,19 @@
     <div id="colorsSection" class="content-section active">
         <div class="grid" id="colorGrid">
             
-            <!-- Seria レモンイエロー -->
+            <!-- Seria レモンイエロー (写真1枚 + ネイル例写真IMG_7571.jpegを自動統合) -->
             <div class="card color-card" data-attribute="単色" onclick="openModal('Seria', 'SEG0013', 'レモンイエロー', '単色', '¥110', '#fff466', '', ['bottles/seria_seg0013.png', 'IMG_7571.jpeg'])">
                 <div class="image-gallery">
-                    <div class="color-chip" style="background-color: #fff466;"></div>
-                    <img src="bottles/seria_seg0013.png" class="nail-photo" alt="レモンイエロー">
+                    <img src="bottles/seria_seg0013.png" class="nail-photo multiple" alt="レモンイエロー">
+                    <img src="IMG_7571.jpeg" class="nail-photo multiple" alt="レモンイエロー ネイル例">
                 </div>
                 <div class="info" onclick="event.stopPropagation()">
                     <div class="category-price"><span class="category">単色</span><span class="price">¥110</span></div>
                     <div class="brand-code"><span class="brand">Seria</span><span class="item-code">No. SEG0013</span></div>
-                    <div class="name">レモンイエロー</div>
+                    <div class="name-row">
+                        <div class="name">レモンイエロー</div>
+                        <div class="inline-color-chip" style="background-color: #fff466;"></div>
+                    </div>
                     <button class="link-btn" onclick="jumpToExample('レモンイエロー')">この色のネイル例を見る →</button>
                 </div>
             </div>
