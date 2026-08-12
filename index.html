@@ -143,7 +143,8 @@
         .wish-img {
             width: 100%;
             height: 280px;
-            object-fit: cover;
+            object-fit: contain; /* 見切れ防止 */
+            background-color: #f8f9fa;
             display: block;
             cursor: pointer;
         }
@@ -162,11 +163,11 @@
             transform: translateY(-3px);
         }
 
-        /* 写真エリアの変更（左側に表示、複数なら並べる、1つなら白背景） */
+        /* 写真エリア（高さを広げ、object-fit: containに変更して見切れを防ぐ） */
         .image-gallery {
             display: flex;
-            height: 160px;
-            background-color: #fff;
+            height: 220px;
+            background-color: #f8f9fa;
             border-bottom: 1px solid #f0f0f0;
             overflow-x: auto;
         }
@@ -174,7 +175,7 @@
             flex: 1;
             min-width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* 見切れないように調整 */
         }
         .nail-photo.multiple {
             min-width: 50%;
@@ -259,8 +260,10 @@
 
         .example-img {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 260px;
+            object-fit: contain; /* 見切れ防止 */
+            background-color: #f8f9fa;
+            cursor: pointer;
         }
         .example-info {
             padding: 16px;
@@ -394,7 +397,7 @@
     <div id="colorsSection" class="content-section active">
         <div class="grid" id="colorGrid">
             
-            <!-- Seria レモンイエロー (写真1枚 + ネイル例写真IMG_7571.jpegを自動統合) -->
+            <!-- Seria レモンイエロー -->
             <div class="card color-card" data-attribute="単色" onclick="openModal('Seria', 'SEG0013', 'レモンイエロー', '単色', '¥110', '#fff466', '', ['bottles/seria_seg0013.png', 'IMG_7571.jpeg'])">
                 <div class="image-gallery">
                     <img src="bottles/seria_seg0013.png" class="nail-photo multiple" alt="レモンイエロー">
@@ -418,7 +421,7 @@
     <div id="examplesSection" class="content-section">
         <div class="grid">
             <div class="card example-card" data-color="レモンイエロー">
-                <img src="IMG_7571.jpeg" class="example-img" alt="レモンイエローネイル例">
+                <img src="IMG_7571.jpeg" class="example-img" alt="レモンイエローネイル例" onclick="openSingleModal('レモンイエローを使用したネイル', ['IMG_7571.jpeg'])">
                 <div class="example-info">
                     <div class="example-title">レモンイエローを使用したネイル</div>
                     <div class="used-colors">使用カラー: レモンイエロー</div>
@@ -431,7 +434,7 @@
     <div id="wishSection" class="content-section">
         <div class="wish-grid">
             <div class="wish-card">
-                <img src="Wishlist/IMG_7562.jpeg" class="wish-img" alt="やりたいネイル">
+                <img src="Wishlist/IMG_7562.jpeg" class="wish-img" alt="やりたいネイル" onclick="openSingleModal('やりたいネイル', ['Wishlist/IMG_7562.jpeg'])">
             </div>
         </div>
     </div>
@@ -445,7 +448,7 @@
             <div id="modalName" style="font-size: 20px; font-weight: bold; margin-bottom: 4px;"></div>
             <div id="modalMeta" style="font-size: 13px; color: #666; margin-bottom: 12px;"></div>
             <div id="modalOfficialLinkContainer"></div>
-            <div style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-top: 16px;">商品・着用写真ギャラリー</div>
+            <div id="modalPhotosTitle" style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-top: 16px;">商品・着用写真ギャラリー</div>
             <div id="modalPhotos" class="modal-photos-grid"></div>
         </div>
     </div>
@@ -568,6 +571,11 @@
         }
 
         function openModal(brand, itemCode, name, category, price, colorCode, officialUrl, photos) {
+            document.getElementById('modalChip').style.display = 'block';
+            document.getElementById('modalBrandCode').style.display = 'flex';
+            document.getElementById('modalMeta').style.display = 'block';
+            document.getElementById('modalPhotosTitle').style.display = 'block';
+
             document.getElementById('modalBrandCode').innerHTML = `<span class="brand">${brand}</span><span class="item-code">No. ${itemCode}</span>`;
             document.getElementById('modalName').innerText = name;
             document.getElementById('modalMeta').innerText = `属性: ${category} / 価格: ${price}`;
@@ -586,6 +594,30 @@
                 const img = document.createElement('img');
                 img.src = url;
                 img.className = 'modal-photo-item';
+                photosContainer.appendChild(img);
+            });
+
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        // ネイル例ややりたいネイルの単体画像用モーダル
+        function openSingleModal(titleName, photos) {
+            document.getElementById('modalChip').style.display = 'none';
+            document.getElementById('modalBrandCode').style.display = 'none';
+            document.getElementById('modalMeta').style.display = 'none';
+            document.getElementById('modalOfficialLinkContainer').innerHTML = '';
+            document.getElementById('modalPhotosTitle').style.display = 'none';
+
+            document.getElementById('modalName').innerText = titleName;
+
+            const photosContainer = document.getElementById('modalPhotos');
+            photosContainer.innerHTML = '';
+            photos.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'modal-photo-item';
+                // 単体画像の場合はグリッド感を消して少し大きく見せる
+                img.style.height = '280px';
                 photosContainer.appendChild(img);
             });
 
