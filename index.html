@@ -26,35 +26,25 @@
             margin-bottom: 20px;
         }
 
-        /* 登録ボタンコンテナ */
-        .action-bar {
-            max-width: 500px;
-            margin: 0 auto 15px auto;
+        /* ヘッダー上部（検索バー ＋ 新規登録ボタンを右上に配置） */
+        .top-header-bar {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
             display: flex;
-            justify-content: flex-end;
-        }
-        .add-open-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background 0.2s;
-        }
-        .add-open-btn:hover {
-            background-color: #bc6c25;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         /* フリーワード検索バー */
         .search-container {
+            flex: 1;
+            min-width: 250px;
             max-width: 500px;
-            margin: 0 auto 20px auto;
             display: flex;
             gap: 8px;
+            margin: 0;
         }
         .search-input {
             flex: 1;
@@ -79,6 +69,23 @@
         }
         .search-clear-btn:hover {
             color: var(--text);
+        }
+
+        .add-open-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .add-open-btn:hover {
+            background-color: #bc6c25;
         }
 
         /* 属性タブナビゲーション */
@@ -291,15 +298,27 @@
         }
         .example-info {
             padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
         .example-title {
             font-size: 15px;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 2px;
         }
         .used-colors {
             font-size: 12px;
             color: var(--gray);
+        }
+        .example-memo {
+            font-size: 12px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            white-space: pre-wrap;
         }
 
         /* 削除ボタン（カード内右上） */
@@ -429,6 +448,7 @@
             padding: 10px 14px;
             border-radius: 8px;
             gap: 10px;
+            margin-bottom: 8px;
         }
         .used-product-info {
             display: flex;
@@ -509,6 +529,34 @@
         .submit-btn:hover {
             background-color: #bc6c25;
         }
+        .dynamic-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+        .add-row-btn {
+            background: #eee;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .add-row-btn:hover {
+            background: #e2e2e2;
+        }
+        .remove-row-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
 
         .filter-status {
             text-align: center;
@@ -529,8 +577,12 @@
 
     <h1>My Nail Collection</h1>
 
-    <!-- 登録用ボタンバー -->
-    <div class="action-bar">
+    {/* 画面右上ヘッダーバー（検索バー ＋ 新規登録ボタン） */}
+    <div id="topHeaderBar" class="top-header-bar">
+        <div id="searchContainer" class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 ブランド名、商品名、品番で検索..." oninput="handleSearch()">
+            <button id="searchClearBtn" class="search-clear-btn" style="display:none;" onclick="clearSearchInput()">クリア</button>
+        </div>
         <button class="add-open-btn" onclick="openAddModal()">＋ 新規アイテムを追加する</button>
     </div>
 
@@ -539,12 +591,6 @@
         <button class="mode-btn active" onclick="switchMainMode('colors', true)">🎨 カラー一覧</button>
         <button class="mode-btn" onclick="switchMainMode('examples', true)">💅 ネイル例</button>
         <button class="mode-btn" onclick="switchMainMode('wish', true)">✨ やりたいネイル</button>
-    </div>
-
-    <!-- フリーワード検索バー -->
-    <div id="searchContainer" class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 ブランド名、商品名、品番で検索..." oninput="handleSearch()">
-        <button id="searchClearBtn" class="search-clear-btn" style="display:none;" onclick="clearSearchInput()">クリア</button>
     </div>
 
     <!-- 属性タブ -->
@@ -665,9 +711,21 @@
                     <label>ネイル例の画像URL</label>
                     <input type="text" id="addExMainImg" class="form-control" placeholder="https://i.imgur.com/...">
                 </div>
+                
+                {/* 複数追加可能な使用カラー入力エリア */}
                 <div class="form-group">
-                    <label>使用したカラーの「商品名」または「品番」（カンマ区切りで複数可）</label>
-                    <input type="text" id="addExUsedColors" class="form-control" placeholder="例: レモンイエロー">
+                    <label>使用した商品（商品名または品番）</label>
+                    <div id="usedColorsContainer">
+                        <div class="dynamic-row">
+                            <input type="text" class="form-control used-color-input" placeholder="例: レモンイエロー">
+                        </div>
+                    </div>
+                    <button type="button" class="add-row-btn" onclick="addUsedColorRow()">＋ 使用カラーの枠を追加</button>
+                </div>
+
+                <div class="form-group">
+                    <label>メモ（任意）</label>
+                    <textarea id="addExMemo" class="form-control" placeholder="デザインのポイントや塗り方のメモなど..." rows="3"></textarea>
                 </div>
             </div>
 
@@ -683,7 +741,6 @@
     </div>
 
     <script>
-        // 初期デフォルトデータ（初期状態のサンプル）
         const defaultData = {
             colors: [
                 {
@@ -704,7 +761,8 @@
                     id: 'e1',
                     title: 'レモンイエローを使用したネイル',
                     mainImg: 'IMG_7571.jpeg',
-                    usedColors: ['レモンイエロー']
+                    usedColors: ['レモンイエロー'],
+                    memo: '夏らしい爽やかな仕上がり'
                 }
             ],
             wishes: [
@@ -715,7 +773,6 @@
             ]
         };
 
-        // ローカルストレージからデータ読み込み（なければ初期データ）
         let appData = JSON.parse(localStorage.getItem('myNailCollectionData')) || defaultData;
         let currentAttribute = 'すべて';
 
@@ -741,7 +798,6 @@
             renderWishes();
         }
 
-        // カラー一覧の描画
         function renderColors() {
             const grid = document.getElementById('colorGrid');
             grid.innerHTML = '';
@@ -776,15 +832,14 @@
             applyFilters();
         }
 
-        // ネイル例の描画
         function renderExamples() {
             const grid = document.getElementById('exampleGrid');
             grid.innerHTML = '';
 
             appData.examples.forEach(item => {
-                // 使用されたカラーオブジェクトの配列を自動紐付け
                 const matchedProducts = [];
-                item.usedColors.forEach(cName => {
+                const usedList = item.usedColors || [];
+                usedList.forEach(cName => {
                     const found = appData.colors.find(c => c.name.toLowerCase() === cName.trim().toLowerCase() || c.itemCode.toLowerCase() === cName.trim().toLowerCase());
                     if (found) {
                         matchedProducts.push({
@@ -802,21 +857,23 @@
 
                 const card = document.createElement('div');
                 card.className = 'card example-card';
-                card.setAttribute('data-color', item.usedColors.join(','));
+                card.setAttribute('data-color', usedList.join(','));
                 
+                let memoHtml = item.memo ? `<div class="example-memo">メモ: ${escapeHtml(item.memo)}</div>` : '';
+
                 card.innerHTML = `
                     <button class="delete-btn" onclick="event.stopPropagation(); deleteItem('examples', '${item.id}')">&times;</button>
                     <img src="${item.mainImg}" class="example-img" alt="${item.title}" onclick='openExampleModal(${JSON.stringify(item.title)}, ${JSON.stringify([item.mainImg])}, ${JSON.stringify(matchedProducts)})'>
                     <div class="example-info">
                         <div class="example-title">${item.title}</div>
-                        <div class="used-colors">使用カラー: ${item.usedColors.join(', ')}</div>
+                        <div class="used-colors">使用カラー: ${usedList.join(', ')}</div>
+                        ${memoHtml}
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // やりたいネイルの描画
         function renderWishes() {
             const grid = document.getElementById('wishGrid');
             grid.innerHTML = '';
@@ -850,7 +907,7 @@
                 document.getElementById('examplesSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[1].classList.add('active');
                 attributeTabs.style.display = 'none';
-                searchContainer.style.display = 'none';
+                searchContainer.style.display = 'flex'; // ネイル例でも検索バーを表示可能にするためflex維持
                 filterStatus.classList.remove('active');
                 if (updateHash) history.replaceState(null, '', '#examples');
             } else if (mode === 'wish') {
@@ -928,7 +985,6 @@
             filterByAttribute('すべて');
         }
 
-        // モーダル制御
         function openModal(brand, itemCode, name, category, price, colorCode, officialUrl, photos) {
             document.getElementById('modalBrandCode').style.display = 'flex';
             document.getElementById('modalMeta').style.display = 'block';
@@ -1053,7 +1109,6 @@
             filterStatus.classList.add('active');
         }
 
-        // 新規登録モーダル制御
         function openAddModal() {
             document.getElementById('addModal').classList.add('active');
         }
@@ -1066,6 +1121,17 @@
             document.getElementById('colorFields').style.display = (type === 'color') ? 'block' : 'none';
             document.getElementById('exampleFields').style.display = (type === 'example') ? 'block' : 'none';
             document.getElementById('wishFields').style.display = (type === 'wish') ? 'block' : 'none';
+        }
+
+        function addUsedColorRow() {
+            const container = document.getElementById('usedColorsContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-row';
+            div.innerHTML = `
+                <input type="text" class="form-control used-color-input" placeholder="例: 商品名または品番">
+                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+            `;
+            container.appendChild(div);
         }
 
         function saveNewItem() {
@@ -1098,13 +1164,23 @@
                     alert('タイトルと画像URLは必須です。');
                     return;
                 }
-                const usedColorsStr = document.getElementById('addExUsedColors').value.trim();
-                const usedColors = usedColorsStr ? usedColorsStr.split(',').map(s => s.trim()) : [];
+                
+                const inputs = document.querySelectorAll('.used-color-input');
+                const usedColors = [];
+                inputs.forEach(input => {
+                    if (input.value.trim()) {
+                        usedColors.push(input.value.trim());
+                    }
+                });
+
+                const memo = document.getElementById('addExMemo').value.trim();
+
                 appData.examples.push({
                     id: newId,
                     title: title,
                     mainImg: mainImg,
-                    usedColors: usedColors
+                    usedColors: usedColors,
+                    memo: memo
                 });
             } else if (type === 'wish') {
                 const img = document.getElementById('addWishImg').value.trim();
@@ -1129,6 +1205,10 @@
             appData[categoryKey] = appData[categoryKey].filter(item => item.id !== id);
             saveData();
             renderAll();
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
     </script>
 
