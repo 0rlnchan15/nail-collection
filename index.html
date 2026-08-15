@@ -26,10 +26,36 @@
             margin-bottom: 20px;
         }
 
-        /* ヘッダー上部（検索バー ＋ 新規登録ボタンを右上に配置） */
+        /* ヘッダー上部（新規登録ボタンのみ右上に配置） */
         .top-header-bar {
             max-width: 1200px;
-            margin: 0 auto 20px auto;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .add-open-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .add-open-btn:hover {
+            background-color: #bc6c25;
+        }
+
+        /* 属性タブ ＆ 検索バーを並べるコンテナ（単色・ベースなどの行） */
+        .filter-header-row {
+            max-width: 1200px;
+            margin: 0 auto 15px auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -37,18 +63,40 @@
             flex-wrap: wrap;
         }
 
-        /* フリーワード検索バー */
-        .search-container {
-            flex: 1;
-            min-width: 250px;
-            max-width: 500px;
+        /* 属性タブナビゲーション */
+        .tabs {
             display: flex;
             gap: 8px;
-            margin: 0;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background-color: #eee;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--gray);
+        }
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
+        }
+
+        /* フリーワード検索バー（属性行の右側） */
+        .search-container {
+            display: flex;
+            gap: 8px;
+            min-width: 250px;
+            max-width: 400px;
+            flex: 1;
         }
         .search-input {
             flex: 1;
-            padding: 10px 16px;
+            padding: 8px 16px;
             font-size: 14px;
             border: 2px solid #ddd;
             border-radius: 25px;
@@ -69,48 +117,6 @@
         }
         .search-clear-btn:hover {
             color: var(--text);
-        }
-
-        .add-open-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-        .add-open-btn:hover {
-            background-color: #bc6c25;
-        }
-
-        /* 属性タブナビゲーション */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            background-color: #eee;
-            border: none;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--gray);
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
 
         /* メイン切り替え用ボタン */
@@ -577,12 +583,8 @@
 
     <h1>My Nail Collection</h1>
 
-    {/* 画面右上ヘッダーバー（検索バー ＋ 新規登録ボタン） */}
-    <div id="topHeaderBar" class="top-header-bar">
-        <div id="searchContainer" class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 ブランド名、商品名、品番で検索..." oninput="handleSearch()">
-            <button id="searchClearBtn" class="search-clear-btn" style="display:none;" onclick="clearSearchInput()">クリア</button>
-        </div>
+    {/* 画面右上ヘッダーバー（新規登録ボタン） */}
+    <div class="top-header-bar">
         <button class="add-open-btn" onclick="openAddModal()">＋ 新規アイテムを追加する</button>
     </div>
 
@@ -593,15 +595,21 @@
         <button class="mode-btn" onclick="switchMainMode('wish', true)">✨ やりたいネイル</button>
     </div>
 
-    <!-- 属性タブ -->
-    <div id="attributeTabs" class="tabs">
-        <button class="tab-btn active" onclick="filterByAttribute('すべて')">すべて</button>
-        <button class="tab-btn" onclick="filterByAttribute('ベース')">ベース</button>
-        <button class="tab-btn" onclick="filterByAttribute('トップ')">トップ</button>
-        <button class="tab-btn" onclick="filterByAttribute('単色')">単色</button>
-        <button class="tab-btn" onclick="filterByAttribute('マグネット')">マグネット</button>
-        <button class="tab-btn" onclick="filterByAttribute('フラッシュ')">フラッシュ</button>
-        <button class="tab-btn" onclick="filterByAttribute('その他')">その他</button>
+    <!-- 属性タブ ＆ 検索バーの行 -->
+    <div id="filterHeaderRow" class="filter-header-row">
+        <div id="attributeTabs" class="tabs">
+            <button class="tab-btn active" onclick="filterByAttribute('すべて')">すべて</button>
+            <button class="tab-btn" onclick="filterByAttribute('ベース')">ベース</button>
+            <button class="tab-btn" onclick="filterByAttribute('トップ')">トップ</button>
+            <button class="tab-btn" onclick="filterByAttribute('単色')">単色</button>
+            <button class="tab-btn" onclick="filterByAttribute('マグネット')">マグネット</button>
+            <button class="tab-btn" onclick="filterByAttribute('フラッシュ')">フラッシュ</button>
+            <button class="tab-btn" onclick="filterByAttribute('その他')">その他</button>
+        </div>
+        <div id="searchContainer" class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 ブランド、商品名、品番..." oninput="handleSearch()">
+            <button id="searchClearBtn" class="search-clear-btn" style="display:none;" onclick="clearSearchInput()">クリア</button>
+        </div>
     </div>
 
     <div id="filterStatus" class="filter-status">
@@ -893,28 +901,30 @@
             document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.mode-btn').forEach(el => el.classList.remove('active'));
 
-            const searchContainer = document.getElementById('searchContainer');
+            const filterHeaderRow = document.getElementById('filterHeaderRow');
             const attributeTabs = document.getElementById('attributeTabs');
+            const searchContainer = document.getElementById('searchContainer');
             const filterStatus = document.getElementById('filterStatus');
 
             if (mode === 'colors') {
                 document.getElementById('colorsSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[0].classList.add('active');
+                filterHeaderRow.style.display = 'flex';
                 attributeTabs.style.display = 'flex';
                 searchContainer.style.display = 'flex';
                 if (updateHash) history.replaceState(null, '', '#colors');
             } else if (mode === 'examples') {
                 document.getElementById('examplesSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[1].classList.add('active');
-                attributeTabs.style.display = 'none';
-                searchContainer.style.display = 'flex'; // ネイル例でも検索バーを表示可能にするためflex維持
+                filterHeaderRow.style.display = 'flex';
+                attributeTabs.style.display = 'none'; // ネイル例では属性タブを非表示にし、検索バーのみ右側に配置
+                searchContainer.style.display = 'flex';
                 filterStatus.classList.remove('active');
                 if (updateHash) history.replaceState(null, '', '#examples');
             } else if (mode === 'wish') {
                 document.getElementById('wishSection').classList.add('active');
                 document.querySelectorAll('.mode-btn')[2].classList.add('active');
-                attributeTabs.style.display = 'none';
-                searchContainer.style.display = 'none';
+                filterHeaderRow.style.display = 'none'; // やりたいネイルでは行自体を非表示
                 filterStatus.classList.remove('active');
                 if (updateHash) history.replaceState(null, '', '#wish');
             }
