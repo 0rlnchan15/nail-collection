@@ -171,9 +171,16 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             transition: transform 0.2s;
             position: relative;
+            cursor: pointer;
         }
         .wish-card:hover {
             transform: translateY(-3px);
+        }
+        .wish-img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            background-color: #f8f9fa;
         }
 
         .card {
@@ -191,24 +198,41 @@
             transform: translateY(-3px);
         }
 
-        /* 写真エリア（最大2枚まで縦に大きく表示） */
+        /* 写真エリア（横に並べて表示するように修正） */
         .image-gallery {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             background-color: #f8f9fa;
             border-bottom: 1px solid #f0f0f0;
-            max-height: 320px;
+            height: 180px;
             overflow: hidden;
+            position: relative;
         }
         .nail-photo {
-            width: 100%;
-            height: 160px;
-            object-fit: contain;
+            flex: 1;
+            height: 100%;
+            object-fit: cover;
             background-color: #f8f9fa;
-            border-bottom: 1px solid #eee;
+            border-right: 1px solid #eee;
+        }
+        .nail-photo:last-child {
+            border-right: none;
         }
         .nail-photo.single-large {
-            height: 320px;
+            height: 180px;
+            width: 100%;
+        }
+        .more-photos-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 12px;
+            pointer-events: none;
         }
 
         .info {
@@ -783,7 +807,7 @@
 
         let appData = JSON.parse(localStorage.getItem('myNailCollectionData')) || defaultData;
         
-        // 旧データ形式（bottleImg/exampleImg/mainImg/img）の互換性対応
+        // 旧データ形式の互換性対応
         appData.colors.forEach(item => {
             if (!item.images && (item.bottleImg || item.exampleImg)) {
                 item.images = [item.bottleImg, item.exampleImg].filter(Boolean);
@@ -846,9 +870,12 @@
                 } else if (imgs.length === 1) {
                     galleryHtml += `<img src="${imgs[0]}" class="nail-photo single-large" alt="${item.name}">`;
                 } else {
-                    // 2枚以上ある場合は上から順に表示（カード内では最大2枚）
+                    // 最大2枚まで横並びで表示し、3枚以上ある場合は＋〇枚バッジを表示
                     galleryHtml += `<img src="${imgs[0]}" class="nail-photo" alt="${item.name}">`;
                     galleryHtml += `<img src="${imgs[1]}" class="nail-photo" alt="${item.name}">`;
+                    if (imgs.length > 2) {
+                        galleryHtml += `<div class="more-photos-badge">+${imgs.length - 2}枚</div>`;
+                    }
                 }
                 galleryHtml += `</div>`;
 
@@ -909,6 +936,9 @@
                 } else {
                     galleryHtml += `<img src="${imgs[0]}" class="nail-photo" alt="${item.title}">`;
                     galleryHtml += `<img src="${imgs[1]}" class="nail-photo" alt="${item.title}">`;
+                    if (imgs.length > 2) {
+                        galleryHtml += `<div class="more-photos-badge">+${imgs.length - 2}枚</div>`;
+                    }
                 }
                 galleryHtml += `</div>`;
 
@@ -947,7 +977,10 @@
                         <button class="action-btn" onclick="event.stopPropagation(); openEditModal('wishes', '${item.id}')" title="編集">✏️</button>
                         <button class="action-btn delete-btn" onclick="event.stopPropagation(); deleteItem('wishes', '${item.id}')" title="削除">&times;</button>
                     </div>
-                    <img src="${firstImg}" class="wish-img" alt="やりたいネイル" onclick="openSingleModal('やりたいネイル', ${JSON.stringify(imgs)})">
+                    <div onclick="openSingleModal('やりたいネイル', ${JSON.stringify(imgs)})" style="position:relative;">
+                        <img src="${firstImg}" class="wish-img" alt="やりたいネイル">
+                        ${imgs.length > 1 ? `<div class="more-photos-badge">+${imgs.length - 1}枚</div>` : ''}
+                    </div>
                 `;
                 grid.appendChild(card);
             });
@@ -1182,7 +1215,6 @@
             document.getElementById('editItemId').value = '';
             document.getElementById('addTypeGroup').style.display = 'block';
 
-            // フォーム初期化
             document.getElementById('addBrand').value = '';
             document.getElementById('addName').value = '';
             document.getElementById('addItemCode').value = '';
@@ -1364,7 +1396,6 @@
             const type = document.getElementById('addType').value;
 
             if (editKey && editId) {
-                // 既存項目の更新（編集）
                 let item = appData[editKey].find(i => i.id === editId);
                 if (!item) return;
 
@@ -1419,7 +1450,6 @@
                 alert('アイテムを更新しました！');
 
             } else {
-                // 新規登録
                 const newId = 'id_' + Date.now();
 
                 if (type === 'color') {
