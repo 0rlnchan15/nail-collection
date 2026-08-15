@@ -79,7 +79,7 @@
             background-color: #bc6c25;
         }
 
-        /* 属性タブ ＆ 検索バーを並べるコンテナ（単色・ベースなどの行） */
+        /* 属性タブ ＆ 検索バーを並べるコンテナ */
         .filter-header-row {
             max-width: 1200px;
             margin: 0 auto 15px auto;
@@ -90,7 +90,6 @@
             flex-wrap: wrap;
         }
 
-        /* 属性タブナビゲーション */
         .tabs {
             display: flex;
             gap: 8px;
@@ -113,7 +112,6 @@
             box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
 
-        /* フリーワード検索バー（属性行の右側） */
         .search-container {
             display: flex;
             gap: 8px;
@@ -161,7 +159,6 @@
             gap: 20px;
         }
 
-        /* やりたいネイル専用グリッド */
         .wish-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -177,14 +174,6 @@
         }
         .wish-card:hover {
             transform: translateY(-3px);
-        }
-        .wish-img {
-            width: 100%;
-            height: 280px;
-            object-fit: contain;
-            background-color: #f8f9fa;
-            display: block;
-            cursor: pointer;
         }
 
         .card {
@@ -202,23 +191,24 @@
             transform: translateY(-3px);
         }
 
-        /* 写真エリア */
+        /* 写真エリア（最大2枚まで縦に大きく表示） */
         .image-gallery {
             display: flex;
-            height: 220px;
+            flex-direction: column;
             background-color: #f8f9fa;
             border-bottom: 1px solid #f0f0f0;
-            overflow-x: auto;
+            max-height: 320px;
+            overflow: hidden;
         }
         .nail-photo {
-            flex: 1;
-            min-width: 100%;
-            height: 100%;
+            width: 100%;
+            height: 160px;
             object-fit: contain;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
         }
-        .nail-photo.multiple {
-            min-width: 50%;
-            border-right: 1px solid #fff;
+        .nail-photo.single-large {
+            height: 320px;
         }
 
         .info {
@@ -296,13 +286,6 @@
             color: #bc6c25;
         }
 
-        .example-img {
-            width: 100%;
-            height: 260px;
-            object-fit: contain;
-            background-color: #f8f9fa;
-            cursor: pointer;
-        }
         .example-info {
             padding: 16px;
             display: flex;
@@ -391,7 +374,6 @@
             color: #888;
         }
         
-        /* 詳細モーダル内 */
         .modal-title-row {
             display: flex;
             align-items: center;
@@ -434,14 +416,13 @@
         }
         .modal-photo-item {
             width: 100%;
-            height: 350px;
+            height: 380px;
             object-fit: contain;
             background-color: #f8f9fa;
             border-radius: 10px;
             border: 1px solid #eee;
         }
         
-        /* 使用商品セクション */
         .used-products-container {
             margin-top: 20px;
             border-top: 1px solid #eee;
@@ -504,7 +485,6 @@
             background-color: #bc6c25;
         }
 
-        /* 登録フォーム用スタイル */
         .form-group {
             margin-bottom: 14px;
         }
@@ -591,7 +571,7 @@
 
     <h1>My Nail Collection</h1>
 
-    <!-- メインコントロール行（タブ ＆ 新規登録ボタンを同じ行に配置） -->
+    <!-- メインコントロール行 -->
     <div class="header-control-row">
         <div class="main-mode-tabs">
             <button class="mode-btn active" onclick="switchMainMode('colors', true)">🎨 カラー一覧</button>
@@ -709,13 +689,15 @@
                     <label>公式サイトURL（任意）</label>
                     <input type="text" id="addOfficialUrl" class="form-control" placeholder="https://...">
                 </div>
+
                 <div class="form-group">
-                    <label>ボトル画像URL（Imgur等の画像リンク）</label>
-                    <input type="text" id="addBottleImg" class="form-control" placeholder="https://i.imgur.com/...">
-                </div>
-                <div class="form-group">
-                    <label>着用・ネイル例画像URL（任意）</label>
-                    <input type="text" id="addExampleImg" class="form-control" placeholder="https://i.imgur.com/...">
+                    <label>商品・着用画像URL（複数追加可能）</label>
+                    <div id="colorImagesContainer">
+                        <div class="dynamic-row">
+                            <input type="text" class="form-control color-image-input" placeholder="https://i.imgur.com/...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-row-btn" onclick="addColorImageRow()">＋ 画像の枠を追加</button>
                 </div>
             </div>
 
@@ -724,9 +706,15 @@
                     <label>ネイル例タイトル</label>
                     <input type="text" id="addExTitle" class="form-control" placeholder="例: レモンイエローを使用したネイル">
                 </div>
+
                 <div class="form-group">
-                    <label>ネイル例の画像URL</label>
-                    <input type="text" id="addExMainImg" class="form-control" placeholder="https://i.imgur.com/...">
+                    <label>ネイル例の画像URL（複数追加可能）</label>
+                    <div id="exampleImagesContainer">
+                        <div class="dynamic-row">
+                            <input type="text" class="form-control example-image-input" placeholder="https://i.imgur.com/...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-row-btn" onclick="addExampleImageRow()">＋ 画像の枠を追加</button>
                 </div>
                 
                 <div class="form-group">
@@ -747,8 +735,13 @@
 
             <div id="wishFields" style="display: none;">
                 <div class="form-group">
-                    <label>やりたいネイルの画像URL</label>
-                    <input type="text" id="addWishImg" class="form-control" placeholder="https://i.imgur.com/...">
+                    <label>やりたいネイルの画像URL（複数追加可能）</label>
+                    <div id="wishImagesContainer">
+                        <div class="dynamic-row">
+                            <input type="text" class="form-control wish-image-input" placeholder="https://i.imgur.com/...">
+                        </div>
+                    </div>
+                    <button type="button" class="add-row-btn" onclick="addWishImageRow()">＋ 画像の枠を追加</button>
                 </div>
             </div>
 
@@ -768,15 +761,14 @@
                     price: '¥110',
                     colorCode: '#fff466',
                     officialUrl: '',
-                    bottleImg: 'bottles/seria_seg0013.png',
-                    exampleImg: 'IMG_7571.jpeg'
+                    images: ['bottles/seria_seg0013.png', 'IMG_7571.jpeg']
                 }
             ],
             examples: [
                 {
                     id: 'e1',
                     title: 'レモンイエローを使用したネイル',
-                    mainImg: 'IMG_7571.jpeg',
+                    images: ['IMG_7571.jpeg'],
                     usedColors: ['レモンイエロー'],
                     memo: '夏らしい爽やかな仕上がり'
                 }
@@ -784,12 +776,33 @@
             wishes: [
                 {
                     id: 'w1',
-                    img: 'Wishlist/IMG_7562.jpeg'
+                    images: ['Wishlist/IMG_7562.jpeg']
                 }
             ]
         };
 
         let appData = JSON.parse(localStorage.getItem('myNailCollectionData')) || defaultData;
+        
+        // 旧データ形式（bottleImg/exampleImg/mainImg/img）の互換性対応
+        appData.colors.forEach(item => {
+            if (!item.images && (item.bottleImg || item.exampleImg)) {
+                item.images = [item.bottleImg, item.exampleImg].filter(Boolean);
+            }
+            if (!item.images) item.images = [];
+        });
+        appData.examples.forEach(item => {
+            if (!item.images && item.mainImg) {
+                item.images = [item.mainImg];
+            }
+            if (!item.images) item.images = [];
+        });
+        appData.wishes.forEach(item => {
+            if (!item.images && item.img) {
+                item.images = [item.img];
+            }
+            if (!item.images) item.images = [];
+        });
+
         let currentAttribute = 'すべて';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -823,11 +836,20 @@
                 card.className = 'card color-card';
                 card.setAttribute('data-attribute', item.category);
                 card.setAttribute('data-search', `${item.brand} ${item.name} ${item.itemCode}`.toLowerCase());
-                card.onclick = () => openModal(item.brand, item.itemCode, item.name, item.category, item.price, item.colorCode, item.officialUrl, [item.bottleImg, item.exampleImg].filter(Boolean));
+                
+                const imgs = item.images || [];
+                card.onclick = () => openModal(item.brand, item.itemCode, item.name, item.category, item.price, item.colorCode, item.officialUrl, imgs);
 
                 let galleryHtml = `<div class="image-gallery">`;
-                if (item.bottleImg) galleryHtml += `<img src="${item.bottleImg}" class="nail-photo ${item.exampleImg ? 'multiple' : ''}" alt="${item.name}">`;
-                if (item.exampleImg) galleryHtml += `<img src="${item.exampleImg}" class="nail-photo multiple" alt="${item.name} ネイル例">`;
+                if (imgs.length === 0) {
+                    galleryHtml += `<div class="nail-photo single-large" style="display:flex;align-items:center;justify-content:center;color:#ccc;font-size:12px;">No Image</div>`;
+                } else if (imgs.length === 1) {
+                    galleryHtml += `<img src="${imgs[0]}" class="nail-photo single-large" alt="${item.name}">`;
+                } else {
+                    // 2枚以上ある場合は上から順に表示（カード内では最大2枚）
+                    galleryHtml += `<img src="${imgs[0]}" class="nail-photo" alt="${item.name}">`;
+                    galleryHtml += `<img src="${imgs[1]}" class="nail-photo" alt="${item.name}">`;
+                }
                 galleryHtml += `</div>`;
 
                 card.innerHTML = `
@@ -869,7 +891,7 @@
                             price: found.price,
                             colorCode: found.colorCode,
                             officialUrl: found.officialUrl,
-                            photos: [found.bottleImg, found.exampleImg].filter(Boolean)
+                            photos: found.images || []
                         });
                     }
                 });
@@ -878,6 +900,18 @@
                 card.className = 'card example-card';
                 card.setAttribute('data-color', usedList.join(','));
                 
+                const imgs = item.images || [];
+                let galleryHtml = `<div class="image-gallery">`;
+                if (imgs.length === 0) {
+                    galleryHtml += `<div class="nail-photo single-large" style="display:flex;align-items:center;justify-content:center;color:#ccc;font-size:12px;">No Image</div>`;
+                } else if (imgs.length === 1) {
+                    galleryHtml += `<img src="${imgs[0]}" class="nail-photo single-large" alt="${item.title}">`;
+                } else {
+                    galleryHtml += `<img src="${imgs[0]}" class="nail-photo" alt="${item.title}">`;
+                    galleryHtml += `<img src="${imgs[1]}" class="nail-photo" alt="${item.title}">`;
+                }
+                galleryHtml += `</div>`;
+
                 let memoHtml = item.memo ? `<div class="example-memo">メモ: ${escapeHtml(item.memo)}</div>` : '';
 
                 card.innerHTML = `
@@ -885,7 +919,9 @@
                         <button class="action-btn" onclick="event.stopPropagation(); openEditModal('examples', '${item.id}')" title="編集">✏️</button>
                         <button class="action-btn delete-btn" onclick="event.stopPropagation(); deleteItem('examples', '${item.id}')" title="削除">&times;</button>
                     </div>
-                    <img src="${item.mainImg}" class="example-img" alt="${item.title}" onclick='openExampleModal(${JSON.stringify(item.title)}, ${JSON.stringify([item.mainImg])}, ${JSON.stringify(matchedProducts)})'>
+                    <div onclick='openExampleModal(${JSON.stringify(item.title)}, ${JSON.stringify(imgs)}, ${JSON.stringify(matchedProducts)})' style="cursor:pointer;">
+                        ${galleryHtml}
+                    </div>
                     <div class="example-info">
                         <div class="example-title">${item.title}</div>
                         <div class="used-colors">使用カラー: ${usedList.join(', ')}</div>
@@ -903,12 +939,15 @@
             appData.wishes.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'wish-card';
+                const imgs = item.images || [];
+                const firstImg = imgs.length > 0 ? imgs[0] : '';
+
                 card.innerHTML = `
                     <div class="card-actions">
                         <button class="action-btn" onclick="event.stopPropagation(); openEditModal('wishes', '${item.id}')" title="編集">✏️</button>
                         <button class="action-btn delete-btn" onclick="event.stopPropagation(); deleteItem('wishes', '${item.id}')" title="削除">&times;</button>
                     </div>
-                    <img src="${item.img}" class="wish-img" alt="やりたいネイル" onclick="openSingleModal('やりたいネイル', ['${item.img}'])">
+                    <img src="${firstImg}" class="wish-img" alt="やりたいネイル" onclick="openSingleModal('やりたいネイル', ${JSON.stringify(imgs)})">
                 `;
                 grid.appendChild(card);
             });
@@ -1143,25 +1182,37 @@
             document.getElementById('editItemId').value = '';
             document.getElementById('addTypeGroup').style.display = 'block';
 
-            // フォームクリア
+            // フォーム初期化
             document.getElementById('addBrand').value = '';
             document.getElementById('addName').value = '';
             document.getElementById('addItemCode').value = '';
             document.getElementById('addPrice').value = '¥110';
             document.getElementById('addColorCode').value = '#fff466';
             document.getElementById('addOfficialUrl').value = '';
-            document.getElementById('addBottleImg').value = '';
-            document.getElementById('addExampleImg').value = '';
+            
+            document.getElementById('colorImagesContainer').innerHTML = `
+                <div class="dynamic-row">
+                    <input type="text" class="form-control color-image-input" placeholder="https://i.imgur.com/...">
+                </div>
+            `;
+            document.getElementById('exampleImagesContainer').innerHTML = `
+                <div class="dynamic-row">
+                    <input type="text" class="form-control example-image-input" placeholder="https://i.imgur.com/...">
+                </div>
+            `;
+            document.getElementById('wishImagesContainer').innerHTML = `
+                <div class="dynamic-row">
+                    <input type="text" class="form-control wish-image-input" placeholder="https://i.imgur.com/...">
+                </div>
+            `;
 
             document.getElementById('addExTitle').value = '';
-            document.getElementById('addExMainImg').value = '';
             document.getElementById('addExMemo').value = '';
             document.getElementById('usedColorsContainer').innerHTML = `
                 <div class="dynamic-row">
                     <input type="text" class="form-control used-color-input" placeholder="例: レモンイエロー">
                 </div>
             `;
-            document.getElementById('addWishImg').value = '';
 
             document.getElementById('addModal').classList.add('active');
             toggleFormFields();
@@ -1180,6 +1231,8 @@
             document.getElementById('addType').value = (categoryKey === 'colors') ? 'color' : (categoryKey === 'examples') ? 'example' : 'wish';
             toggleFormFields();
 
+            const imgs = item.images || [];
+
             if (categoryKey === 'colors') {
                 document.getElementById('addBrand').value = item.brand || '';
                 document.getElementById('addName').value = item.name || '';
@@ -1188,13 +1241,37 @@
                 document.getElementById('addPrice').value = item.price || '¥110';
                 document.getElementById('addColorCode').value = item.colorCode || '#fff466';
                 document.getElementById('addOfficialUrl').value = item.officialUrl || '';
-                document.getElementById('addBottleImg').value = item.bottleImg || '';
-                document.getElementById('addExampleImg').value = item.exampleImg || '';
+
+                const container = document.getElementById('colorImagesContainer');
+                container.innerHTML = '';
+                const list = imgs.length > 0 ? imgs : [''];
+                list.forEach(url => {
+                    const div = document.createElement('div');
+                    div.className = 'dynamic-row';
+                    div.innerHTML = `
+                        <input type="text" class="form-control color-image-input" value="${url}" placeholder="https://i.imgur.com/...">
+                        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+                    `;
+                    container.appendChild(div);
+                });
+
             } else if (categoryKey === 'examples') {
                 document.getElementById('addExTitle').value = item.title || '';
-                document.getElementById('addExMainImg').value = item.mainImg || '';
                 document.getElementById('addExMemo').value = item.memo || '';
                 
+                const imgContainer = document.getElementById('exampleImagesContainer');
+                imgContainer.innerHTML = '';
+                const list = imgs.length > 0 ? imgs : [''];
+                list.forEach(url => {
+                    const div = document.createElement('div');
+                    div.className = 'dynamic-row';
+                    div.innerHTML = `
+                        <input type="text" class="form-control example-image-input" value="${url}" placeholder="https://i.imgur.com/...">
+                        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+                    `;
+                    imgContainer.appendChild(div);
+                });
+
                 const container = document.getElementById('usedColorsContainer');
                 container.innerHTML = '';
                 const used = item.usedColors && item.usedColors.length > 0 ? item.usedColors : [''];
@@ -1207,8 +1284,20 @@
                     `;
                     container.appendChild(div);
                 });
+
             } else if (categoryKey === 'wishes') {
-                document.getElementById('addWishImg').value = item.img || '';
+                const container = document.getElementById('wishImagesContainer');
+                container.innerHTML = '';
+                const list = imgs.length > 0 ? imgs : [''];
+                list.forEach(url => {
+                    const div = document.createElement('div');
+                    div.className = 'dynamic-row';
+                    div.innerHTML = `
+                        <input type="text" class="form-control wish-image-input" value="${url}" placeholder="https://i.imgur.com/...">
+                        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+                    `;
+                    container.appendChild(div);
+                });
             }
 
             document.getElementById('addModal').classList.add('active');
@@ -1223,6 +1312,39 @@
             document.getElementById('colorFields').style.display = (type === 'color') ? 'block' : 'none';
             document.getElementById('exampleFields').style.display = (type === 'example') ? 'block' : 'none';
             document.getElementById('wishFields').style.display = (type === 'wish') ? 'block' : 'none';
+        }
+
+        function addColorImageRow() {
+            const container = document.getElementById('colorImagesContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-row';
+            div.innerHTML = `
+                <input type="text" class="form-control color-image-input" placeholder="https://i.imgur.com/...">
+                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function addExampleImageRow() {
+            const container = document.getElementById('exampleImagesContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-row';
+            div.innerHTML = `
+                <input type="text" class="form-control example-image-input" placeholder="https://i.imgur.com/...">
+                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function addWishImageRow() {
+            const container = document.getElementById('wishImagesContainer');
+            const div = document.createElement('div');
+            div.className = 'dynamic-row';
+            div.innerHTML = `
+                <input type="text" class="form-control wish-image-input" placeholder="https://i.imgur.com/...">
+                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
+            `;
+            container.appendChild(div);
         }
 
         function addUsedColorRow() {
@@ -1258,28 +1380,37 @@
                     item.price = document.getElementById('addPrice').value.trim() || '¥110';
                     item.colorCode = document.getElementById('addColorCode').value;
                     item.officialUrl = document.getElementById('addOfficialUrl').value.trim();
-                    item.bottleImg = document.getElementById('addBottleImg').value.trim();
-                    item.exampleImg = document.getElementById('addExampleImg').value.trim();
+
+                    const inputs = document.querySelectorAll('.color-image-input');
+                    const imgs = [];
+                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+                    item.images = imgs;
+
                 } else if (editKey === 'examples') {
                     item.title = document.getElementById('addExTitle').value.trim();
-                    item.mainImg = document.getElementById('addExMainImg').value.trim();
-                    if (!item.title || !item.mainImg) {
-                        alert('タイトルと画像URLは必須です。');
+                    if (!item.title) {
+                        alert('タイトルは必須です。');
                         return;
                     }
-                    const inputs = document.querySelectorAll('.used-color-input');
+
+                    const inputs = document.querySelectorAll('.example-image-input');
+                    const imgs = [];
+                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+                    item.images = imgs;
+
+                    const colorInputs = document.querySelectorAll('.used-color-input');
                     const usedColors = [];
-                    inputs.forEach(input => {
+                    colorInputs.forEach(input => {
                         if (input.value.trim()) usedColors.push(input.value.trim());
                     });
                     item.usedColors = usedColors;
                     item.memo = document.getElementById('addExMemo').value.trim();
+
                 } else if (editKey === 'wishes') {
-                    item.img = document.getElementById('addWishImg').value.trim();
-                    if (!item.img) {
-                        alert('画像URLは必須です。');
-                        return;
-                    }
+                    const inputs = document.querySelectorAll('.wish-image-input');
+                    const imgs = [];
+                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+                    item.images = imgs;
                 }
 
                 saveData();
@@ -1298,6 +1429,11 @@
                         alert('ブランド名と商品名は必須です。');
                         return;
                     }
+
+                    const inputs = document.querySelectorAll('.color-image-input');
+                    const imgs = [];
+                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+
                     appData.colors.push({
                         id: newId,
                         brand: brand,
@@ -1307,20 +1443,22 @@
                         price: document.getElementById('addPrice').value.trim() || '¥110',
                         colorCode: document.getElementById('addColorCode').value,
                         officialUrl: document.getElementById('addOfficialUrl').value.trim(),
-                        bottleImg: document.getElementById('addBottleImg').value.trim(),
-                        exampleImg: document.getElementById('addExampleImg').value.trim()
+                        images: imgs
                     });
                 } else if (type === 'example') {
                     const title = document.getElementById('addExTitle').value.trim();
-                    const mainImg = document.getElementById('addExMainImg').value.trim();
-                    if (!title || !mainImg) {
-                        alert('タイトルと画像URLは必須です。');
+                    if (!title) {
+                        alert('タイトルは必須です。');
                         return;
                     }
                     
-                    const inputs = document.querySelectorAll('.used-color-input');
+                    const inputs = document.querySelectorAll('.example-image-input');
+                    const imgs = [];
+                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+
+                    const colorInputs = document.querySelectorAll('.used-color-input');
                     const usedColors = [];
-                    inputs.forEach(input => {
+                    colorInputs.forEach(input => {
                         if (input.value.trim()) {
                             usedColors.push(input.value.trim());
                         }
@@ -1331,19 +1469,18 @@
                     appData.examples.push({
                         id: newId,
                         title: title,
-                        mainImg: mainImg,
+                        images: imgs,
                         usedColors: usedColors,
                         memo: memo
                     });
                 } else if (type === 'wish') {
-                    const img = document.getElementById('addWishImg').value.trim();
-                    if (!img) {
-                        alert('画像URLは必須です。');
-                        return;
-                    }
+                    const inputs = document.querySelectorAll('.wish-image-input');
+                    const imgs = [];
+                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+
                     appData.wishes.push({
                         id: newId,
-                        img: img
+                        images: imgs
                     });
                 }
 
