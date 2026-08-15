@@ -715,13 +715,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>商品・着用画像URL（複数追加可能）</label>
+                    <label>商品・着用画像ファイル（複数選択可能）</label>
                     <div id="colorImagesContainer">
                         <div class="dynamic-row">
-                            <input type="text" class="form-control color-image-input" placeholder="https://i.imgur.com/...">
+                            <input type="file" accept="image/*" class="form-control color-image-input" multiple>
                         </div>
                     </div>
-                    <button type="button" class="add-row-btn" onclick="addColorImageRow()">＋ 画像の枠を追加</button>
                 </div>
             </div>
 
@@ -732,13 +731,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>ネイル例の画像URL（複数追加可能）</label>
+                    <label>ネイル例の画像ファイル（複数選択可能）</label>
                     <div id="exampleImagesContainer">
                         <div class="dynamic-row">
-                            <input type="text" class="form-control example-image-input" placeholder="https://i.imgur.com/...">
+                            <input type="file" accept="image/*" class="form-control example-image-input" multiple>
                         </div>
                     </div>
-                    <button type="button" class="add-row-btn" onclick="addExampleImageRow()">＋ 画像の枠を追加</button>
                 </div>
                 
                 <div class="form-group">
@@ -759,13 +757,12 @@
 
             <div id="wishFields" style="display: none;">
                 <div class="form-group">
-                    <label>やりたいネイルの画像URL（複数追加可能）</label>
+                    <label>やりたいネイルの画像ファイル（複数選択可能）</label>
                     <div id="wishImagesContainer">
                         <div class="dynamic-row">
-                            <input type="text" class="form-control wish-image-input" placeholder="https://i.imgur.com/...">
+                            <input type="file" accept="image/*" class="form-control wish-image-input" multiple>
                         </div>
                     </div>
-                    <button type="button" class="add-row-btn" onclick="addWishImageRow()">＋ 画像の枠を追加</button>
                 </div>
             </div>
 
@@ -807,26 +804,6 @@
 
         let appData = JSON.parse(localStorage.getItem('myNailCollectionData')) || defaultData;
         
-        // 旧データ形式の互換性対応
-        appData.colors.forEach(item => {
-            if (!item.images && (item.bottleImg || item.exampleImg)) {
-                item.images = [item.bottleImg, item.exampleImg].filter(Boolean);
-            }
-            if (!item.images) item.images = [];
-        });
-        appData.examples.forEach(item => {
-            if (!item.images && item.mainImg) {
-                item.images = [item.mainImg];
-            }
-            if (!item.images) item.images = [];
-        });
-        appData.wishes.forEach(item => {
-            if (!item.images && item.img) {
-                item.images = [item.img];
-            }
-            if (!item.images) item.images = [];
-        });
-
         let currentAttribute = 'すべて';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -842,7 +819,11 @@
         });
 
         function saveData() {
-            localStorage.setItem('myNailCollectionData', JSON.stringify(appData));
+            try {
+                localStorage.setItem('myNailCollectionData', JSON.stringify(appData));
+            } catch (e) {
+                alert('ストレージの容量がいっぱいです。画像サイズが大きい可能性があります。');
+            }
         }
 
         function renderAll() {
@@ -870,7 +851,6 @@
                 } else if (imgs.length === 1) {
                     galleryHtml += `<img src="${imgs[0]}" class="nail-photo single-large" alt="${item.name}">`;
                 } else {
-                    // 最大2枚まで横並びで表示し、3枚以上ある場合は＋〇枚バッジを表示
                     galleryHtml += `<img src="${imgs[0]}" class="nail-photo" alt="${item.name}">`;
                     galleryHtml += `<img src="${imgs[1]}" class="nail-photo" alt="${item.name}">`;
                     if (imgs.length > 2) {
@@ -1224,17 +1204,17 @@
             
             document.getElementById('colorImagesContainer').innerHTML = `
                 <div class="dynamic-row">
-                    <input type="text" class="form-control color-image-input" placeholder="https://i.imgur.com/...">
+                    <input type="file" accept="image/*" class="form-control color-image-input" multiple>
                 </div>
             `;
             document.getElementById('exampleImagesContainer').innerHTML = `
                 <div class="dynamic-row">
-                    <input type="text" class="form-control example-image-input" placeholder="https://i.imgur.com/...">
+                    <input type="file" accept="image/*" class="form-control example-image-input" multiple>
                 </div>
             `;
             document.getElementById('wishImagesContainer').innerHTML = `
                 <div class="dynamic-row">
-                    <input type="text" class="form-control wish-image-input" placeholder="https://i.imgur.com/...">
+                    <input type="file" accept="image/*" class="form-control wish-image-input" multiple>
                 </div>
             `;
 
@@ -1263,8 +1243,6 @@
             document.getElementById('addType').value = (categoryKey === 'colors') ? 'color' : (categoryKey === 'examples') ? 'example' : 'wish';
             toggleFormFields();
 
-            const imgs = item.images || [];
-
             if (categoryKey === 'colors') {
                 document.getElementById('addBrand').value = item.brand || '';
                 document.getElementById('addName').value = item.name || '';
@@ -1274,35 +1252,19 @@
                 document.getElementById('addColorCode').value = item.colorCode || '#fff466';
                 document.getElementById('addOfficialUrl').value = item.officialUrl || '';
 
-                const container = document.getElementById('colorImagesContainer');
-                container.innerHTML = '';
-                const list = imgs.length > 0 ? imgs : [''];
-                list.forEach(url => {
-                    const div = document.createElement('div');
-                    div.className = 'dynamic-row';
-                    div.innerHTML = `
-                        <input type="text" class="form-control color-image-input" value="${url}" placeholder="https://i.imgur.com/...">
-                        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
-                    `;
-                    container.appendChild(div);
-                });
+                document.getElementById('colorImagesContainer').innerHTML = `
+                    <div style="font-size:12px; color:#888; margin-bottom:4px;">※新しいファイルを選択すると画像が置き換わります（未選択の場合はそのまま維持されます）</div>
+                    <input type="file" accept="image/*" class="form-control color-image-input" multiple>
+                `;
 
             } else if (categoryKey === 'examples') {
                 document.getElementById('addExTitle').value = item.title || '';
                 document.getElementById('addExMemo').value = item.memo || '';
                 
-                const imgContainer = document.getElementById('exampleImagesContainer');
-                imgContainer.innerHTML = '';
-                const list = imgs.length > 0 ? imgs : [''];
-                list.forEach(url => {
-                    const div = document.createElement('div');
-                    div.className = 'dynamic-row';
-                    div.innerHTML = `
-                        <input type="text" class="form-control example-image-input" value="${url}" placeholder="https://i.imgur.com/...">
-                        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
-                    `;
-                    imgContainer.appendChild(div);
-                });
+                document.getElementById('exampleImagesContainer').innerHTML = `
+                    <div style="font-size:12px; color:#888; margin-bottom:4px;">※新しいファイルを選択すると画像が置き換わります（未選択の場合はそのまま維持されます）</div>
+                    <input type="file" accept="image/*" class="form-control example-image-input" multiple>
+                `;
 
                 const container = document.getElementById('usedColorsContainer');
                 container.innerHTML = '';
@@ -1318,18 +1280,10 @@
                 });
 
             } else if (categoryKey === 'wishes') {
-                const container = document.getElementById('wishImagesContainer');
-                container.innerHTML = '';
-                const list = imgs.length > 0 ? imgs : [''];
-                list.forEach(url => {
-                    const div = document.createElement('div');
-                    div.className = 'dynamic-row';
-                    div.innerHTML = `
-                        <input type="text" class="form-control wish-image-input" value="${url}" placeholder="https://i.imgur.com/...">
-                        <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
-                    `;
-                    container.appendChild(div);
-                });
+                document.getElementById('wishImagesContainer').innerHTML = `
+                    <div style="font-size:12px; color:#888; margin-bottom:4px;">※新しいファイルを選択すると画像が置き換わります（未選択の場合はそのまま維持されます）</div>
+                    <input type="file" accept="image/*" class="form-control wish-image-input" multiple>
+                `;
             }
 
             document.getElementById('addModal').classList.add('active');
@@ -1346,39 +1300,6 @@
             document.getElementById('wishFields').style.display = (type === 'wish') ? 'block' : 'none';
         }
 
-        function addColorImageRow() {
-            const container = document.getElementById('colorImagesContainer');
-            const div = document.createElement('div');
-            div.className = 'dynamic-row';
-            div.innerHTML = `
-                <input type="text" class="form-control color-image-input" placeholder="https://i.imgur.com/...">
-                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
-            `;
-            container.appendChild(div);
-        }
-
-        function addExampleImageRow() {
-            const container = document.getElementById('exampleImagesContainer');
-            const div = document.createElement('div');
-            div.className = 'dynamic-row';
-            div.innerHTML = `
-                <input type="text" class="form-control example-image-input" placeholder="https://i.imgur.com/...">
-                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
-            `;
-            container.appendChild(div);
-        }
-
-        function addWishImageRow() {
-            const container = document.getElementById('wishImagesContainer');
-            const div = document.createElement('div');
-            div.className = 'dynamic-row';
-            div.innerHTML = `
-                <input type="text" class="form-control wish-image-input" placeholder="https://i.imgur.com/...">
-                <button type="button" class="remove-row-btn" onclick="this.parentElement.remove()">削除</button>
-            `;
-            container.appendChild(div);
-        }
-
         function addUsedColorRow() {
             const container = document.getElementById('usedColorsContainer');
             const div = document.createElement('div');
@@ -1390,7 +1311,23 @@
             container.appendChild(div);
         }
 
-        function saveNewItem() {
+        // ファイルをBase64データURLに変換して読み込むヘルパー関数
+        async function readFilesAsDataUrls(inputElement) {
+            const files = inputElement.files;
+            if (!files || files.length === 0) return [];
+            
+            const promises = Array.from(files).map(file => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target.result);
+                    reader.onerror = e => reject(e);
+                    reader.readAsDataURL(file);
+                });
+            });
+            return await Promise.all(promises);
+        }
+
+        async function saveNewItem() {
             const editKey = document.getElementById('editCategoryKey').value;
             const editId = document.getElementById('editItemId').value;
             const type = document.getElementById('addType').value;
@@ -1412,10 +1349,11 @@
                     item.colorCode = document.getElementById('addColorCode').value;
                     item.officialUrl = document.getElementById('addOfficialUrl').value.trim();
 
-                    const inputs = document.querySelectorAll('.color-image-input');
-                    const imgs = [];
-                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
-                    item.images = imgs;
+                    const fileInput = document.querySelector('.color-image-input');
+                    const newImgs = await readFilesAsDataUrls(fileInput);
+                    if (newImgs.length > 0) {
+                        item.images = newImgs;
+                    }
 
                 } else if (editKey === 'examples') {
                     item.title = document.getElementById('addExTitle').value.trim();
@@ -1424,10 +1362,11 @@
                         return;
                     }
 
-                    const inputs = document.querySelectorAll('.example-image-input');
-                    const imgs = [];
-                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
-                    item.images = imgs;
+                    const fileInput = document.querySelector('.example-image-input');
+                    const newImgs = await readFilesAsDataUrls(fileInput);
+                    if (newImgs.length > 0) {
+                        item.images = newImgs;
+                    }
 
                     const colorInputs = document.querySelectorAll('.used-color-input');
                     const usedColors = [];
@@ -1438,10 +1377,11 @@
                     item.memo = document.getElementById('addExMemo').value.trim();
 
                 } else if (editKey === 'wishes') {
-                    const inputs = document.querySelectorAll('.wish-image-input');
-                    const imgs = [];
-                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
-                    item.images = imgs;
+                    const fileInput = document.querySelector('.wish-image-input');
+                    const newImgs = await readFilesAsDataUrls(fileInput);
+                    if (newImgs.length > 0) {
+                        item.images = newImgs;
+                    }
                 }
 
                 saveData();
@@ -1460,9 +1400,8 @@
                         return;
                     }
 
-                    const inputs = document.querySelectorAll('.color-image-input');
-                    const imgs = [];
-                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+                    const fileInput = document.querySelector('.color-image-input');
+                    const imgs = await readFilesAsDataUrls(fileInput);
 
                     appData.colors.push({
                         id: newId,
@@ -1482,9 +1421,8 @@
                         return;
                     }
                     
-                    const inputs = document.querySelectorAll('.example-image-input');
-                    const imgs = [];
-                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+                    const fileInput = document.querySelector('.example-image-input');
+                    const imgs = await readFilesAsDataUrls(fileInput);
 
                     const colorInputs = document.querySelectorAll('.used-color-input');
                     const usedColors = [];
@@ -1504,9 +1442,8 @@
                         memo: memo
                     });
                 } else if (type === 'wish') {
-                    const inputs = document.querySelectorAll('.wish-image-input');
-                    const imgs = [];
-                    inputs.forEach(inp => { if (inp.value.trim()) imgs.push(inp.value.trim()); });
+                    const fileInput = document.querySelector('.wish-image-input');
+                    const imgs = await readFilesAsDataUrls(fileInput);
 
                     appData.wishes.push({
                         id: newId,
