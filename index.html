@@ -26,6 +26,29 @@
             margin-bottom: 20px;
         }
 
+        /* 登録ボタンコンテナ */
+        .action-bar {
+            max-width: 500px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .add-open-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+        .add-open-btn:hover {
+            background-color: #bc6c25;
+        }
+
         /* フリーワード検索バー */
         .search-container {
             max-width: 500px;
@@ -124,7 +147,7 @@
             gap: 20px;
         }
 
-        /* 「やりたいネイル」専用の写真メイングリッド */
+        /* やりたいネイル専用グリッド */
         .wish-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -136,6 +159,7 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             transition: transform 0.2s;
+            position: relative;
         }
         .wish-card:hover {
             transform: translateY(-3px);
@@ -158,6 +182,7 @@
             flex-direction: column;
             cursor: pointer;
             transition: transform 0.2s;
+            position: relative;
         }
         .card:hover {
             transform: translateY(-3px);
@@ -277,7 +302,30 @@
             color: var(--gray);
         }
 
-        /* モーダル */
+        /* 削除ボタン（カード内右上） */
+        .delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s;
+        }
+        .delete-btn:hover {
+            background: #d90429;
+        }
+
+        /* モーダル共通 */
         .modal {
             display: none;
             position: fixed;
@@ -310,7 +358,7 @@
             color: #888;
         }
         
-        /* モーダル内のタイトル行（商品名＋丸い色見本） */
+        /* 詳細モーダル内 */
         .modal-title-row {
             display: flex;
             align-items: center;
@@ -329,7 +377,6 @@
             border: 1px solid #ccc;
             flex-shrink: 0;
         }
-
         .official-link {
             display: inline-block;
             margin-top: 10px;
@@ -361,7 +408,7 @@
             border: 1px solid #eee;
         }
         
-        /* ネイル例ポップアップ下部の使用商品セクション */
+        /* 使用商品セクション */
         .used-products-container {
             margin-top: 20px;
             border-top: 1px solid #eee;
@@ -423,6 +470,46 @@
             background-color: #bc6c25;
         }
 
+        /* 登録フォーム用スタイル */
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #444;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+        .submit-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #bc6c25;
+        }
+
         .filter-status {
             text-align: center;
             margin-bottom: 20px;
@@ -441,6 +528,11 @@
 <body>
 
     <h1>My Nail Collection</h1>
+
+    <!-- 登録用ボタンバー -->
+    <div class="action-bar">
+        <button class="add-open-btn" onclick="openAddModal()">＋ 新規アイテムを追加する</button>
+    </div>
 
     <!-- メイン切り替え用ボタン -->
     <div class="main-mode-tabs">
@@ -473,55 +565,23 @@
 
     <!-- カラー一覧セクション -->
     <div id="colorsSection" class="content-section active">
-        <div class="grid" id="colorGrid">
-            
-            <!-- Seria レモンイエロー -->
-            <div id="card-seria-seg0013" class="card color-card" data-attribute="単色" onclick="openModal('Seria', 'SEG0013', 'レモンイエロー', '単色', '¥110', '#fff466', '', ['bottles/seria_seg0013.png', 'IMG_7571.jpeg'])">
-                <div class="image-gallery">
-                    <img src="bottles/seria_seg0013.png" class="nail-photo multiple" alt="レモンイエロー">
-                    <img src="IMG_7571.jpeg" class="nail-photo multiple" alt="レモンイエロー ネイル例">
-                </div>
-                <div class="info" onclick="event.stopPropagation()">
-                    <div class="category-price"><span class="category">単色</span><span class="price">¥110</span></div>
-                    <div class="brand-code"><span class="brand">Seria</span><span class="item-code">No. SEG0013</span></div>
-                    <div class="name-row">
-                        <div class="name">レモンイエロー</div>
-                        <div class="inline-color-chip" style="background-color: #fff466;"></div>
-                    </div>
-                    <button class="link-btn" onclick="jumpToExample('レモンイエロー')">この色のネイル例を見る →</button>
-                </div>
-            </div>
-
-        </div>
+        <div class="grid" id="colorGrid"></div>
     </div>
 
     <!-- ネイル例セクション -->
     <div id="examplesSection" class="content-section">
-        <div class="grid">
-            <div class="card example-card" data-color="レモンイエロー">
-                <img src="IMG_7571.jpeg" class="example-img" alt="レモンイエローネイル例" onclick="openExampleModal('レモンイエローを使用したネイル', ['IMG_7571.jpeg'], [{brand: 'Seria', itemCode: 'SEG0013', name: 'レモンイエロー', category: '単色', price: '¥110', colorCode: '#fff466', officialUrl: '', photos: ['bottles/seria_seg0013.png', 'IMG_7571.jpeg']}])">
-                <div class="example-info">
-                    <div class="example-title">レモンイエローを使用したネイル</div>
-                    <div class="used-colors">使用カラー: レモンイエロー</div>
-                </div>
-            </div>
-        </div>
+        <div class="grid" id="exampleGrid"></div>
     </div>
 
-    <!-- やりたいネイルセクション（写真のみ） -->
+    <!-- やりたいネイルセクション -->
     <div id="wishSection" class="content-section">
-        <div class="wish-grid">
-            <div class="wish-card">
-                <img src="Wishlist/IMG_7562.jpeg" class="wish-img" alt="やりたいネイル" onclick="openSingleModal('やりたいネイル', ['Wishlist/IMG_7562.jpeg'])">
-            </div>
-        </div>
+        <div class="wish-grid" id="wishGrid"></div>
     </div>
 
     <!-- 詳細モーダルウィンドウ -->
     <div id="detailModal" class="modal" onclick="closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <span class="close-btn" onclick="closeModal()">&times;</span>
-            <!-- モーダルタイトル行（商品名＋丸い色見本を配置するエリア） -->
             <div id="modalTitleRow" class="modal-title-row">
                 <div id="modalName" class="modal-name-text"></div>
                 <div id="modalHeaderChip" class="modal-header-chip" style="display: none;"></div>
@@ -531,12 +591,132 @@
             <div id="modalOfficialLinkContainer"></div>
             <div id="modalPhotosTitle" style="font-size: 13px; font-weight: bold; color: #444; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-top: 16px;">商品・着用写真ギャラリー</div>
             <div id="modalPhotos" class="modal-photos-grid"></div>
-            <!-- ネイル例ポップ用：使用した商品セクション -->
             <div id="modalUsedProducts" class="used-products-container" style="display: none;"></div>
         </div>
     </div>
 
+    <!-- 新規登録モーダルウィンドウ -->
+    <div id="addModal" class="modal" onclick="closeAddModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeAddModal()">&times;</span>
+            <h2 style="color: var(--primary); margin-top: 0; font-size: 20px; text-align: center;">新規アイテム登録</h2>
+            
+            <div class="form-group">
+                <label>登録先カテゴリ</label>
+                <select id="addType" class="form-control" onchange="toggleFormFields()">
+                    <option value="color">🎨 カラー一覧</option>
+                    <option value="example">💅 ネイル例</option>
+                    <option value="wish">✨ やりたいネイル</option>
+                </select>
+            </div>
+
+            <div id="colorFields">
+                <div class="form-group">
+                    <label>ブランド名</label>
+                    <input type="text" id="addBrand" class="form-control" placeholder="例: Seria, CANMAKE">
+                </div>
+                <div class="form-group">
+                    <label>商品名</label>
+                    <input type="text" id="addName" class="form-control" placeholder="例: レモンイエロー">
+                </div>
+                <div class="form-group">
+                    <label>品番（商品コード）</label>
+                    <input type="text" id="addItemCode" class="form-control" placeholder="例: SEG0013">
+                </div>
+                <div class="form-group">
+                    <label>属性・カテゴリ</label>
+                    <select id="addCategory" class="form-control">
+                        <option value="単色">単色</option>
+                        <option value="ベース">ベース</option>
+                        <option value="トップ">トップ</option>
+                        <option value="マグネット">マグネット</option>
+                        <option value="フラッシュ">フラッシュ</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>価格</label>
+                    <input type="text" id="addPrice" class="form-control" value="¥110" placeholder="例: ¥110">
+                </div>
+                <div class="form-group">
+                    <label>カラーコード（見本の色）</label>
+                    <input type="color" id="addColorCode" class="form-control" value="#fff466" style="height: 40px; padding: 2px; cursor: pointer;">
+                </div>
+                <div class="form-group">
+                    <label>公式サイトURL（任意）</label>
+                    <input type="text" id="addOfficialUrl" class="form-control" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>ボトル画像URL（Imgur等の画像リンク）</label>
+                    <input type="text" id="addBottleImg" class="form-control" placeholder="https://i.imgur.com/...">
+                </div>
+                <div class="form-group">
+                    <label>着用・ネイル例画像URL（任意）</label>
+                    <input type="text" id="addExampleImg" class="form-control" placeholder="https://i.imgur.com/...">
+                </div>
+            </div>
+
+            <div id="exampleFields" style="display: none;">
+                <div class="form-group">
+                    <label>ネイル例タイトル</label>
+                    <input type="text" id="addExTitle" class="form-control" placeholder="例: レモンイエローを使用したネイル">
+                </div>
+                <div class="form-group">
+                    <label>ネイル例の画像URL</label>
+                    <input type="text" id="addExMainImg" class="form-control" placeholder="https://i.imgur.com/...">
+                </div>
+                <div class="form-group">
+                    <label>使用したカラーの「商品名」または「品番」（カンマ区切りで複数可）</label>
+                    <input type="text" id="addExUsedColors" class="form-control" placeholder="例: レモンイエロー">
+                </div>
+            </div>
+
+            <div id="wishFields" style="display: none;">
+                <div class="form-group">
+                    <label>やりたいネイルの画像URL</label>
+                    <input type="text" id="addWishImg" class="form-control" placeholder="https://i.imgur.com/...">
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="saveNewItem()">登録する</button>
+        </div>
+    </div>
+
     <script>
+        // 初期デフォルトデータ（初期状態のサンプル）
+        const defaultData = {
+            colors: [
+                {
+                    id: 'c1',
+                    brand: 'Seria',
+                    itemCode: 'SEG0013',
+                    name: 'レモンイエロー',
+                    category: '単色',
+                    price: '¥110',
+                    colorCode: '#fff466',
+                    officialUrl: '',
+                    bottleImg: 'bottles/seria_seg0013.png',
+                    exampleImg: 'IMG_7571.jpeg'
+                }
+            ],
+            examples: [
+                {
+                    id: 'e1',
+                    title: 'レモンイエローを使用したネイル',
+                    mainImg: 'IMG_7571.jpeg',
+                    usedColors: ['レモンイエロー']
+                }
+            ],
+            wishes: [
+                {
+                    id: 'w1',
+                    img: 'Wishlist/IMG_7562.jpeg'
+                }
+            ]
+        };
+
+        // ローカルストレージからデータ読み込み（なければ初期データ）
+        let appData = JSON.parse(localStorage.getItem('myNailCollectionData')) || defaultData;
         let currentAttribute = 'すべて';
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -548,7 +728,109 @@
             } else {
                 switchMainMode('colors', false);
             }
+            renderAll();
         });
+
+        function saveData() {
+            localStorage.setItem('myNailCollectionData', JSON.stringify(appData));
+        }
+
+        function renderAll() {
+            renderColors();
+            renderExamples();
+            renderWishes();
+        }
+
+        // カラー一覧の描画
+        function renderColors() {
+            const grid = document.getElementById('colorGrid');
+            grid.innerHTML = '';
+
+            appData.colors.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card color-card';
+                card.setAttribute('data-attribute', item.category);
+                card.setAttribute('data-search', `${item.brand} ${item.name} ${item.itemCode}`.toLowerCase());
+                card.onclick = () => openModal(item.brand, item.itemCode, item.name, item.category, item.price, item.colorCode, item.officialUrl, [item.bottleImg, item.exampleImg].filter(Boolean));
+
+                let galleryHtml = `<div class="image-gallery">`;
+                if (item.bottleImg) galleryHtml += `<img src="${item.bottleImg}" class="nail-photo ${item.exampleImg ? 'multiple' : ''}" alt="${item.name}">`;
+                if (item.exampleImg) galleryHtml += `<img src="${item.exampleImg}" class="nail-photo multiple" alt="${item.name} ネイル例">`;
+                galleryHtml += `</div>`;
+
+                card.innerHTML = `
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteItem('colors', '${item.id}')">&times;</button>
+                    ${galleryHtml}
+                    <div class="info" onclick="event.stopPropagation()">
+                        <div class="category-price"><span class="category">${item.category}</span><span class="price">${item.price}</span></div>
+                        <div class="brand-code"><span class="brand">${item.brand}</span><span class="item-code">No. ${item.itemCode}</span></div>
+                        <div class="name-row">
+                            <div class="name">${item.name}</div>
+                            <div class="inline-color-chip" style="background-color: ${item.colorCode};"></div>
+                        </div>
+                        <button class="link-btn" onclick="jumpToExample('${item.name}')">この色のネイル例を見る →</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            applyFilters();
+        }
+
+        // ネイル例の描画
+        function renderExamples() {
+            const grid = document.getElementById('exampleGrid');
+            grid.innerHTML = '';
+
+            appData.examples.forEach(item => {
+                // 使用されたカラーオブジェクトの配列を自動紐付け
+                const matchedProducts = [];
+                item.usedColors.forEach(cName => {
+                    const found = appData.colors.find(c => c.name.toLowerCase() === cName.trim().toLowerCase() || c.itemCode.toLowerCase() === cName.trim().toLowerCase());
+                    if (found) {
+                        matchedProducts.push({
+                            brand: found.brand,
+                            itemCode: found.itemCode,
+                            name: found.name,
+                            category: found.category,
+                            price: found.price,
+                            colorCode: found.colorCode,
+                            officialUrl: found.officialUrl,
+                            photos: [found.bottleImg, found.exampleImg].filter(Boolean)
+                        });
+                    }
+                });
+
+                const card = document.createElement('div');
+                card.className = 'card example-card';
+                card.setAttribute('data-color', item.usedColors.join(','));
+                
+                card.innerHTML = `
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteItem('examples', '${item.id}')">&times;</button>
+                    <img src="${item.mainImg}" class="example-img" alt="${item.title}" onclick='openExampleModal(${JSON.stringify(item.title)}, ${JSON.stringify([item.mainImg])}, ${JSON.stringify(matchedProducts)})'>
+                    <div class="example-info">
+                        <div class="example-title">${item.title}</div>
+                        <div class="used-colors">使用カラー: ${item.usedColors.join(', ')}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // やりたいネイルの描画
+        function renderWishes() {
+            const grid = document.getElementById('wishGrid');
+            grid.innerHTML = '';
+
+            appData.wishes.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'wish-card';
+                card.innerHTML = `
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteItem('wishes', '${item.id}')">&times;</button>
+                    <img src="${item.img}" class="wish-img" alt="やりたいネイル" onclick="openSingleModal('やりたいネイル', ['${item.img}'])">
+                `;
+                grid.appendChild(card);
+            });
+        }
 
         function switchMainMode(mode, updateHash = true) {
             document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
@@ -588,7 +870,6 @@
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
             const clearBtn = document.getElementById('searchClearBtn');
             clearBtn.style.display = query ? 'block' : 'none';
-
             applyFilters();
         }
 
@@ -600,15 +881,10 @@
 
         function filterByAttribute(attr) {
             currentAttribute = attr;
-
             document.querySelectorAll('.tabs .tab-btn').forEach(btn => {
-                if (btn.innerText === attr) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+                if (btn.innerText === attr) btn.classList.add('active');
+                else btn.classList.remove('active');
             });
-
             applyFilters();
         }
 
@@ -619,10 +895,10 @@
 
             cards.forEach(card => {
                 const attr = card.getAttribute('data-attribute');
-                const cardText = card.innerText.toLowerCase();
+                const searchStr = card.getAttribute('data-search');
 
                 const matchesAttr = (currentAttribute === 'すべて' || attr === currentAttribute);
-                const matchesSearch = (!searchQuery || cardText.includes(searchQuery));
+                const matchesSearch = (!searchQuery || searchStr.includes(searchQuery));
 
                 if (matchesAttr && matchesSearch) {
                     card.style.display = 'flex';
@@ -641,7 +917,6 @@
                 let statusMsg = '';
                 if (currentAttribute !== 'すべて') statusMsg += `属性:「${currentAttribute}」`;
                 if (searchQuery) statusMsg += (statusMsg ? ' / ' : '') + `検索:「${searchQuery}」`;
-                
                 filterText.innerText = `${statusMsg} の結果 (${matchCount}件)`;
                 filterStatus.classList.add('active');
             }
@@ -653,7 +928,7 @@
             filterByAttribute('すべて');
         }
 
-        // カラー一覧からの通常詳細モーダル（商品名の横に丸い色見本を表示）
+        // モーダル制御
         function openModal(brand, itemCode, name, category, price, colorCode, officialUrl, photos) {
             document.getElementById('modalBrandCode').style.display = 'flex';
             document.getElementById('modalMeta').style.display = 'block';
@@ -663,7 +938,6 @@
             document.getElementById('modalBrandCode').innerHTML = `<span class="brand">${brand}</span><span class="item-code">No. ${itemCode}</span>`;
             document.getElementById('modalName').innerText = name;
             
-            // 商品名横の丸い色見本を設定・表示
             const headerChip = document.getElementById('modalHeaderChip');
             if (colorCode) {
                 headerChip.style.backgroundColor = colorCode;
@@ -693,13 +967,12 @@
             document.getElementById('detailModal').classList.add('active');
         }
 
-        // ネイル例専用モーダル
         function openExampleModal(titleName, photos, usedProducts) {
             document.getElementById('modalBrandCode').style.display = 'none';
             document.getElementById('modalMeta').style.display = 'none';
             document.getElementById('modalOfficialLinkContainer').innerHTML = '';
             document.getElementById('modalPhotosTitle').style.display = 'none';
-            document.getElementById('modalHeaderChip').style.display = 'none'; // ネイル例では非表示
+            document.getElementById('modalHeaderChip').style.display = 'none';
 
             document.getElementById('modalName').innerText = titleName;
 
@@ -712,7 +985,6 @@
                 photosContainer.appendChild(img);
             });
 
-            // 使用商品欄の構築
             const usedContainer = document.getElementById('modalUsedProducts');
             if (usedProducts && usedProducts.length > 0) {
                 let html = `<div class="used-products-title">💅 使用した商品</div>`;
@@ -739,7 +1011,6 @@
             document.getElementById('detailModal').classList.add('active');
         }
 
-        // やりたいネイルなど、商品情報がない単体画像用モーダル
         function openSingleModal(titleName, photos) {
             document.getElementById('modalBrandCode').style.display = 'none';
             document.getElementById('modalMeta').style.display = 'none';
@@ -770,7 +1041,7 @@
             switchMainMode('examples', true);
             const cards = document.querySelectorAll('.example-card');
             cards.forEach(card => {
-                if (card.getAttribute('data-color') === colorName) {
+                if (card.getAttribute('data-color').includes(colorName)) {
                     card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
@@ -780,6 +1051,84 @@
             const filterText = document.getElementById('filterText');
             filterText.innerText = `「${colorName}」に関連するネイル例を表示中`;
             filterStatus.classList.add('active');
+        }
+
+        // 新規登録モーダル制御
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+        }
+
+        function toggleFormFields() {
+            const type = document.getElementById('addType').value;
+            document.getElementById('colorFields').style.display = (type === 'color') ? 'block' : 'none';
+            document.getElementById('exampleFields').style.display = (type === 'example') ? 'block' : 'none';
+            document.getElementById('wishFields').style.display = (type === 'wish') ? 'block' : 'none';
+        }
+
+        function saveNewItem() {
+            const type = document.getElementById('addType').value;
+            const newId = 'id_' + Date.now();
+
+            if (type === 'color') {
+                const brand = document.getElementById('addBrand').value.trim();
+                const name = document.getElementById('addName').value.trim();
+                if (!brand || !name) {
+                    alert('ブランド名と商品名は必須です。');
+                    return;
+                }
+                appData.colors.push({
+                    id: newId,
+                    brand: brand,
+                    itemCode: document.getElementById('addItemCode').value.trim() || '---',
+                    name: name,
+                    category: document.getElementById('addCategory').value,
+                    price: document.getElementById('addPrice').value.trim() || '¥110',
+                    colorCode: document.getElementById('addColorCode').value,
+                    officialUrl: document.getElementById('addOfficialUrl').value.trim(),
+                    bottleImg: document.getElementById('addBottleImg').value.trim(),
+                    exampleImg: document.getElementById('addExampleImg').value.trim()
+                });
+            } else if (type === 'example') {
+                const title = document.getElementById('addExTitle').value.trim();
+                const mainImg = document.getElementById('addExMainImg').value.trim();
+                if (!title || !mainImg) {
+                    alert('タイトルと画像URLは必須です。');
+                    return;
+                }
+                const usedColorsStr = document.getElementById('addExUsedColors').value.trim();
+                const usedColors = usedColorsStr ? usedColorsStr.split(',').map(s => s.trim()) : [];
+                appData.examples.push({
+                    id: newId,
+                    title: title,
+                    mainImg: mainImg,
+                    usedColors: usedColors
+                });
+            } else if (type === 'wish') {
+                const img = document.getElementById('addWishImg').value.trim();
+                if (!img) {
+                    alert('画像URLは必須です。');
+                    return;
+                }
+                appData.wishes.push({
+                    id: newId,
+                    img: img
+                });
+            }
+
+            saveData();
+            renderAll();
+            closeAddModal();
+            alert('新しいアイテムを登録しました！');
+        }
+
+        function deleteItem(categoryKey, id) {
+            if (!confirm('このアイテムを削除してもよろしいですか？')) return;
+            appData[categoryKey] = appData[categoryKey].filter(item => item.id !== id);
+            saveData();
+            renderAll();
         }
     </script>
 
